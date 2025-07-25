@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="w1n9">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/07/25/golang八股学习(1)——调度管理/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine My Life.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang的八股学习(1)——调度管理">
+<meta property="og:url" content="http://example.com/2025/07/25/Golang%E5%85%AB%E8%82%A1%E5%AD%A6%E4%B9%A0(1)%E2%80%94%E2%80%94%E8%B0%83%E5%BA%A6%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine My Life.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2025-07-25T04:15:26.000Z">
+<meta property="article:modified_time" content="2025-07-25T04:19:15.505Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/204051836-d495c6a9-db6b-40df-b8be-ff0f2a82862e.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/204051836-d495c6a9-db6b-40df-b8be-ff0f2a82862e.png">
+    <meta name="theme-color" content="#1890ff">
+    <link rel="shortcut icon" href="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/204051836-d495c6a9-db6b-40df-b8be-ff0f2a82862e.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            Golang的八股学习(1)——调度管理 | w1n9のHOME
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+        <link href="" rel="stylesheet">
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"zh-CN"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#1890ff","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":true,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":true},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine My Life."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"w1n9のHOME","subtitle":{"text":["凡事发生","必有利于我"],"hitokoto":{"enable":true,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.4","navbar":{"auto_hide":false,"color":{"left":"#af6bcc","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"分类":{"path":"/categories/","icon":"fa-regular fa-folder"},"标签":{"path":"/tags/","icon":"fa-regular fa-tags"},"友链":{"path":"/links","icon":"fa-regular fa-link"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"标签":{"path":"/tags","icon":"fa-regular fa-tags"},"分类":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3},"分类":{"enable":true,"limit":8},"标签":{"enable":true,"limit":10}},"footerStart":"2025/7/10 8:00:00"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                w1n9のHOME
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/"
+                                        >
+                                    <i class="fa-regular fa-folder fa-fw"></i>
+                                    分类
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/tags/"
+                                        >
+                                    <i class="fa-regular fa-tags fa-fw"></i>
+                                    标签
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/links"
+                                        >
+                                    <i class="fa-regular fa-link fa-fw"></i>
+                                    友链
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/"
+                        >
+                            <span>
+                                分类
+                            </span>
+                            
+                                <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/tags/"
+                        >
+                            <span>
+                                标签
+                            </span>
+                            
+                                <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/links"
+                        >
+                            <span>
+                                友链
+                            </span>
+                            
+                                <i class="fa-regular fa-link fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">1</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">1</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">1</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Golang的八股学习(1)——调度管理</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/b_577a9b6ec958b5976fe7bfc38f6b3c05.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">w1n9</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-07-25 12:15:26</span>
+        <span class="mobile">2025-07-25 12:15:26</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-07-25 12:19:15</span>
+            <span class="mobile">2025-07-25 12:19:15</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/Go/">Go</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Go/">Go</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<blockquote>
+<p>参考文章：</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/95056679" >万字长文深入浅出 Golang Runtime - 知乎<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/323271088" >Go三关-典藏版]Golang调度器GPM原理与调度全分析 - 知乎<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2072913" >深入理解Go调度原理和实现-腾讯云开发者社区-腾讯云<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/IServise/articles/18450813" >深入理解 Go 语言的调度原理 - daligh - 博客园<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zboya.github.io/post/go_scheduler/#%E6%B7%B1%E5%85%A5golang-runtime%E7%9A%84%E8%B0%83%E5%BA%A6" >深入golang runtime的调度<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>（这篇强烈推荐，讲得很细）</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/flhs" >虾敏四把刀 - 博客园<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<p>(本文以学习总结记录和知识分享为主，代码和图片均摘自参考文章。如有侵权请联系)</p>
+</blockquote>
+<h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><p>进程：计算机中一个正在运行的程序实例，拥有独立的内存空间</p>
+<p>线程：进程的基本单元。一个进程至少会有一个主线程，一个进程中多个线程共享进程资源</p>
+<p>协程：线程又分用户级线程和内核级线程，用户级线程又叫做协程。协程更轻量，并且是在用户层进行协作式调度</p>
+<p>并发：多个任务交替进行，但并不一定是同时进行。并发分为同步和互斥</p>
+<p>并行：多个任务同时进行</p>
+<p>区别如图：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://gfw.go101.org/article/res/concurrent-vs-parallel.png"
+                      alt="并发和并行"
+                ></p>
+<p>Golang Runtime（运行时）（图例介绍的很清楚）：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pic1.zhimg.com/v2-1be98248ede156b433c0be4af2d5d73e_r.jpg"
+                      alt="img"
+                ></p>
+<p>总结补充一下就是，他类似（只是在功能上类似，go没有虚拟机这个说法，我感觉本质上是一个包）于go的虚拟机，给程序提供一个运行环境，只不过这个核心“环境”是和用户代码一起被打包到程序里面的。待会要说的调度管理就离不开这个runtime。</p>
+<h2 id="Goroutine"><a href="#Goroutine" class="headerlink" title="Goroutine"></a>Goroutine</h2><p>goroutine是go中的协程，也就是一个在用户层面可以被调度和执行的任务单元。它十分轻量，一般只有几KB的大小，因此在有限的内存的空间里就可以执行很多个goroutine。goroutine记录着执行流，记录当下运行到哪一个函数的哪里，并且当阻塞发生时，它拥有能够随时切换出或者切换回这个执行流的功能，然后由runtime将其它goroutine调度到其他线程上执行，并且这种切换上下文的速度是远远快于线程在内核中的切换</p>
+<p>下面是实现goroutine的结构体和切换函数：</p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//协程结构体</span></span><br><span class="line">typedef g <span class="keyword">struct</span>&#123;</span><br><span class="line">	goid <span class="type">int64</span>  <span class="comment">//协程id</span></span><br><span class="line">	states <span class="type">uint32</span>  <span class="comment">//协程状态</span></span><br><span class="line">	<span class="keyword">type</span> stack <span class="keyword">struct</span>&#123;</span><br><span class="line">        lo <span class="type">uint32</span>  <span class="comment">//协程栈的最低位</span></span><br><span class="line">        hi <span class="type">uint32</span>  <span class="comment">//协程栈的最高位</span></span><br><span class="line">    &#125;</span><br><span class="line">    sched gobuf  <span class="comment">//保存与goroutine运行位置相关的寄存器和指针</span></span><br><span class="line">    startaddr <span class="type">uintptr</span>  <span class="comment">//程序起始位置</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">typedef gobuf <span class="keyword">struct</span>&#123;     <span class="comment">//用于保存切换上下文的信息</span></span><br><span class="line">    sp <span class="type">uintptr</span>  <span class="comment">//栈顶指针</span></span><br><span class="line">    bp <span class="type">uintptr</span>  <span class="comment">//栈底指针</span></span><br><span class="line">    pc <span class="type">uintptr</span>  <span class="comment">//指向程序当前运行的位置，类似于ip</span></span><br><span class="line">    g guintptr  <span class="comment">//就是所谓的goroutine</span></span><br><span class="line">    ctxt unsafe.Pointer  <span class="comment">//垃圾回收时使用</span></span><br><span class="line">    ret <span class="type">uintptr</span> </span><br><span class="line">    lr <span class="type">uintptr</span>  <span class="comment">//保存系统调用时的返回值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>（当然实际比这复杂得多，这里我先暂时只关注它主要的部分）</p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//切换函数mcall实现了保存某个goroutine，切换到g0及其栈，并调用fn函数，其参数就是被保存的goroutine指针</span></span><br><span class="line">TEXT runtime.mcall(SB), NOSPLIT, $<span class="number">0</span><span class="number">-8</span></span><br><span class="line">	MOVQ fn + <span class="number">0</span>(FP), DI</span><br><span class="line">	</span><br><span class="line">	get_tls(CX)   <span class="comment">//从tls中获取g</span></span><br><span class="line">	MOVQ g(CX), AX</span><br><span class="line">	MOVQ <span class="number">0</span>(SP), BX</span><br><span class="line">	MOVQ BX, (g_sched + gobuf_pc)(AX)</span><br><span class="line">	LEAQ fn + <span class="number">0</span>(FP), BX</span><br><span class="line">	MOVQ BX, (g_sched + gobuf_sp)(AX)</span><br><span class="line">	MOVQ AX, (g_sched + gobuf_g)(AX)</span><br><span class="line">	MOVQ BP (g_sched + gobuf_bp)(AX)</span><br><span class="line">	</span><br><span class="line"><span class="comment">//恢复函数gogo实现了从g0切换到某个goroutine，执行关联函数</span></span><br><span class="line">TEXT runtime.gogo(SB), NOSPLIT, $<span class="number">16</span><span class="number">-8</span></span><br><span class="line">	MOVQ buf + <span class="number">0</span>(FP), BX</span><br><span class="line">	MOVQ gobuf_g(BX), DX   <span class="comment">//DX存放gobuf结构</span></span><br><span class="line">	MOVQ <span class="number">0</span>(DX), CX    <span class="comment">//保证该协程为有效值</span></span><br><span class="line">	get_tls(CX)</span><br><span class="line">	MOVQ DX, g(CX)</span><br><span class="line">	MOVQ gobuf_sp(BX), SP   <span class="comment">//恢复SP</span></span><br><span class="line">	MOVQ gobuf_ret(BX), AX</span><br><span class="line">	MOVQ gobuf_ctxt(BX), DX</span><br><span class="line">	MOVQ gobuf_bp(BX), BP</span><br><span class="line">	MOVQ gobuf_pc(BX), BX   <span class="comment">//恢复pc</span></span><br><span class="line">	JMP BX</span><br><span class="line">	</span><br></pre></td></tr></table></figure></div>
+
+<p>当我们想要新建一个goroutine时，就用关键词go</p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> func1(arg1 type1,arg2 type2)&#123;....&#125;(a1,a2)</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="GPM调度模型"><a href="#GPM调度模型" class="headerlink" title="GPM调度模型"></a>GPM调度模型</h2><p>了解了goroutine，就可以正式开始了解他的调度机制：GPM模型。G即为Goroutine，P（Processor）为逻辑调度器，M（Machine）为逻辑处理器，也叫做线程，goroutine刚刚说过了，下面详细说一下后两者</p>
+<p>M：处于内核中的线程，同时也是实际工作的执行者。M的数量是有限制的，一般内核默认最大数量是10000。当然，runtime中的SetMaxThreads函数也会设置M的最大数量。然后M的数量一般比P多</p>
+<p>P：Go1.0以后的版本才推出的概念。是用来调度goroutine，与线程M匹配让线程执行的调度器。P有一个本地队列来存放待运行的G，G的数量最多不超过256个。所有的P都是在程序启动后才创建，最大数量由环境变量$GOMAXPROCS或者runtime里的GOMAXPROCS()决定。下面展示一下P的结构，主要保存着可运行的G的本地队列：</p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> p <span class="keyword">struct</span> &#123;</span><br><span class="line">	lock mutex</span><br><span class="line"></span><br><span class="line">	<span class="comment">// id也是allp的数组下标</span></span><br><span class="line">	id     <span class="type">int32</span></span><br><span class="line">	status <span class="type">uint32</span> <span class="comment">// one of pidle/prunning/...</span></span><br><span class="line">	<span class="comment">// 单向链表，指向下一个P的地址</span></span><br><span class="line">	link puintptr</span><br><span class="line">	<span class="comment">// 每调度一次加1</span></span><br><span class="line">	schedtick <span class="type">uint32</span> <span class="comment">// incremented on every scheduler call</span></span><br><span class="line">	<span class="comment">// 每一次系统调用加1</span></span><br><span class="line">	syscalltick <span class="type">uint32</span>     <span class="comment">// incremented on every system call</span></span><br><span class="line">	sysmontick  sysmontick <span class="comment">// last tick observed by sysmon</span></span><br><span class="line">	<span class="comment">// 回链到关联的m</span></span><br><span class="line">	m       muintptr <span class="comment">// back-link to associated m (nil if idle)</span></span><br><span class="line">	mcache  *mcache</span><br><span class="line">	racectx <span class="type">uintptr</span></span><br><span class="line"></span><br><span class="line">	deferpool    [<span class="number">5</span>][]*_defer <span class="comment">// pool of available defer structs of different sizes (see panic.go)</span></span><br><span class="line">	deferpoolbuf [<span class="number">5</span>][<span class="number">32</span>]*_defer</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Cache of goroutine ids, amortizes accesses to runtime·sched.goidgen.</span></span><br><span class="line">	<span class="comment">// goroutine的ID的缓存</span></span><br><span class="line">	goidcache    <span class="type">uint64</span></span><br><span class="line">	goidcacheend <span class="type">uint64</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Queue of runnable goroutines. Accessed without lock.</span></span><br><span class="line">	<span class="comment">// 可运行的goroutine的队列</span></span><br><span class="line">	runqhead <span class="type">uint32</span></span><br><span class="line">	runqtail <span class="type">uint32</span></span><br><span class="line">	runq     [<span class="number">256</span>]guintptr</span><br><span class="line">	<span class="comment">// runnext, if non-nil, is a runnable G that was ready&#x27;d by</span></span><br><span class="line">	<span class="comment">// the current G and should be run next instead of what&#x27;s in</span></span><br><span class="line">	<span class="comment">// runq if there&#x27;s time remaining in the running G&#x27;s time</span></span><br><span class="line">	<span class="comment">// slice. It will inherit the time left in the current time</span></span><br><span class="line">	<span class="comment">// slice. If a set of goroutines is locked in a</span></span><br><span class="line">	<span class="comment">// communicate-and-wait pattern, this schedules that set as a</span></span><br><span class="line">	<span class="comment">// unit and eliminates the (potentially large) scheduling</span></span><br><span class="line">	<span class="comment">// latency that otherwise arises from adding the ready&#x27;d</span></span><br><span class="line">	<span class="comment">// goroutines to the end of the run queue.</span></span><br><span class="line">	<span class="comment">// 下一个运行的g，优先级最高</span></span><br><span class="line">	runnext guintptr</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Available G&#x27;s (status == Gdead)</span></span><br><span class="line">	gfree    *g</span><br><span class="line">	gfreecnt <span class="type">int32</span></span><br><span class="line"></span><br><span class="line">	sudogcache []*sudog</span><br><span class="line">	sudogbuf   [<span class="number">128</span>]*sudog</span><br><span class="line">	</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+
+<p>下面贴一张很经典的图来看一下GPM模型运转的大概逻辑：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pica.zhimg.com/v2-a66cb6d05fb61e74681410feb3bd1df4_r.jpg"
+                      alt="img"
+                ></p>
+<p>稍微解释一下，首先G就是我们要执行的任务，当我们用go func（）创建一个G时，他被保存到本地队列或者全局队列中，一般新建一个G他会优先被保存到本地队列中，本地队列存放数量最多不超过256个，如果队列满了就把本地队列中的一半放入全局队列中，然后执行者M就要从P中获取一个G来执行</p>
+<h3 id="work-stealing机制"><a href="#work-stealing机制" class="headerlink" title="work stealing机制"></a>work stealing机制</h3><p>P队列为空时，M也会尝试从全局队列拿一批G放到P的本地队列，或从其他P的本地队列<strong>偷</strong>一半放到自己P的本地队列。M运行G，G执行之后，M会从P获取下一个G，不断重复下去。</p>
+<h3 id="hand-off机制"><a href="#hand-off机制" class="headerlink" title="hand off机制"></a>hand off机制</h3><p>当本线程因为G进行系统调用阻塞时，线程释放绑定的P，把P转移给其他空闲的线程执行。</p>
+<p>总的来说，GPM模型的主要思想就是协程对线程的复用，这比频繁的创建销毁线程要节省很多时间和资源，并且与传统的M：N模型相比，GPM多了一个处理器（P）的概念，因此用户就不需要管理用户线程和内核线程之间的映射，一切对goroutine的调度都在用户层由runtime实现。此外还有一点，Go的一个强项就是天生支持并发，并发包含了并行的实现，并行度由GOMAXPROCS来控制，默认等于cpu数，当GOMAXPROCS大于1时，就最多有GOMAXPROCS个线程同时处于运行状态，这些线程可能分布在多个CPU核上同时运行，这样就可以充分利用多核。</p>
+<h2 id="启动过程"><a href="#启动过程" class="headerlink" title="启动过程"></a>启动过程</h2><p>如图，主要经过以下流程：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://segmentfault.com/img/remote/1460000041938861"
+                      alt="0"
+                ></p>
+<p>Go 进程的启动是通过汇编代码进行的，入口函数在asm_amd64.s这个文件中的runtime.rt0_go部分代码</p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"> <span class="number">1</span> <span class="comment">// runtime·rt0_go</span></span><br><span class="line"> <span class="number">2</span> </span><br><span class="line"> <span class="number">3</span> <span class="comment">// 程序刚启动的时候必定有一个线程启动（主线程）</span></span><br><span class="line"> <span class="number">4</span> <span class="comment">// 将当前的栈和资源保存在g0</span></span><br><span class="line"> <span class="number">5</span> <span class="comment">// 将该线程保存在m0</span></span><br><span class="line"> <span class="number">6</span> <span class="comment">// tls: Thread Local Storage</span></span><br><span class="line"> <span class="number">7</span> <span class="comment">// set the per-goroutine and per-mach &quot;registers&quot;</span></span><br><span class="line"> <span class="number">8</span> get_tls(BX)</span><br><span class="line"> <span class="number">9</span> LEAQ    runtime·g0(SB), CX</span><br><span class="line"><span class="number">10</span> MOVQ    CX, g(BX)</span><br><span class="line"><span class="number">11</span> LEAQ    runtime·m0(SB), AX</span><br><span class="line"><span class="number">12</span> </span><br><span class="line"><span class="number">13</span> <span class="comment">// m0和g0互相绑定</span></span><br><span class="line"><span class="number">14</span> <span class="comment">// save m-&gt;g0 = g0</span></span><br><span class="line"><span class="number">15</span> MOVQ    CX, m_g0(AX)</span><br><span class="line"><span class="number">16</span> <span class="comment">// save m0 to g0-&gt;m</span></span><br><span class="line"><span class="number">17</span> MOVQ    AX, g_m(CX)</span><br><span class="line"><span class="number">18</span> <span class="comment">// 处理args</span></span><br><span class="line"><span class="number">19</span> CALL    runtime·args(SB) </span><br><span class="line"><span class="number">20</span> <span class="comment">// os初始化， os_linux.go</span></span><br><span class="line"><span class="number">21</span> CALL    runtime·osinit(SB) </span><br><span class="line"><span class="number">22</span> <span class="comment">// 调度系统初始化, proc.go</span></span><br><span class="line"><span class="number">23</span> CALL    runtime·schedinit(SB) </span><br><span class="line"><span class="number">24</span> </span><br><span class="line"><span class="number">25</span> <span class="comment">// 创建一个goroutine，然后开启执行程序</span></span><br><span class="line"><span class="number">26</span> <span class="comment">// create a new goroutine to start program</span></span><br><span class="line"><span class="number">27</span> MOVQ    $runtime·mainPC(SB), AX        <span class="comment">// entry</span></span><br><span class="line"><span class="number">28</span> PUSHQ    AX</span><br><span class="line"><span class="number">29</span> PUSHQ    $<span class="number">0</span>            <span class="comment">// arg size</span></span><br><span class="line"><span class="number">30</span> CALL    runtime·newproc(SB)</span><br><span class="line"><span class="number">31</span> POPQ    AX</span><br><span class="line"><span class="number">32</span> POPQ    AX</span><br><span class="line"><span class="number">33</span> </span><br><span class="line"><span class="number">34</span> <span class="comment">// start this M</span></span><br><span class="line"><span class="number">35</span> <span class="comment">// 启动线程，并且启动调度系统</span></span><br><span class="line"><span class="number">36</span> CALL    runtime·mstart(SB)</span><br></pre></td></tr></table></figure></div>
+
+<p>下面详细讲讲每一步的函数干了什么</p>
+<ul>
+<li><p>在程序启动开始，runtime会创建一个初始线程m0，主要负责执行初始化操作和启动第一个G；g0则是每次启动一个M都会创建的第一个goroutine，g0不指向任何一个可执行的函数，只是在在调度或系统调用时会使用g0的栈空间。开始的第一步则是创建最初的m0和g0，并把2者关联。</p>
+</li>
+<li><p>调用runtime.osinit函数。这个函数主要就是涉及一些操作系统相关的初始化操作，比如：设置M的数量，设置线程的栈大小，进行必要的系统调用等。不同的系统具体实现的操作不同,下面展示一种在linux平台上的函数实现：</p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 Linux 上的初始化</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">osinit</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 初始化 CPU 核心数</span></span><br><span class="line">    gomaxprocs()</span><br><span class="line">    <span class="comment">// 创建操作系统线程（M）</span></span><br><span class="line">    createInitialThreads()</span><br><span class="line">    <span class="comment">// 初始化 Linux 操作系统的特定资源</span></span><br><span class="line">    initLinuxResources()</span><br><span class="line">    <span class="comment">// 调用其他操作系统特定的初始化代码</span></span><br><span class="line">    initPlatformSpecific()</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">initLinuxResources</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// Linux 上可能需要执行一些操作系统特定的初始化，如设置文件描述符、网络套接字等</span></span><br><span class="line">    <span class="comment">// 示例：设置文件描述符、网络连接、I/O 操作等</span></span><br><span class="line">    setupFileDescriptors()</span><br><span class="line">    setupNetworkIO()</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>调用runtime·schedinit函数来初始化调度系统，进行调度器P的初始化，并将M0与P绑定</p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"> <span class="number">1</span> <span class="function"><span class="keyword">func</span> <span class="title">schedinit</span><span class="params">()</span></span> &#123;</span><br><span class="line"> <span class="number">2</span> ................</span><br><span class="line"> <span class="number">3</span>     <span class="comment">// g0</span></span><br><span class="line"> <span class="number">4</span>    _g_ := getg()</span><br><span class="line"> <span class="number">5</span>    <span class="keyword">if</span> raceenabled &#123;</span><br><span class="line"> <span class="number">6</span>       _g_.racectx, raceprocctx0 = raceinit()</span><br><span class="line"> <span class="number">7</span>    &#125;</span><br><span class="line"> <span class="number">8</span>     <span class="comment">// 最多启动10000个工作线程</span></span><br><span class="line"> <span class="number">9</span>    sched.maxmcount = <span class="number">10000</span></span><br><span class="line"><span class="number">10</span> </span><br><span class="line"><span class="number">11</span>    <span class="comment">// The world starts stopped.</span></span><br><span class="line"><span class="number">12</span>    worldStopped()</span><br><span class="line"><span class="number">13</span> </span><br><span class="line"><span class="number">14</span>    moduledataverify()</span><br><span class="line"><span class="number">15</span>    <span class="comment">// 初始化协程堆栈，包括专门分配小栈的stackpool和分配大栈的stackLarge</span></span><br><span class="line"><span class="number">16</span>    stackinit()</span><br><span class="line"><span class="number">17</span>    <span class="comment">// 整个堆内存的初始化分配</span></span><br><span class="line"><span class="number">18</span>    mallocinit()</span><br><span class="line"><span class="number">19</span>    fastrandinit() <span class="comment">// must run before mcommoninit</span></span><br><span class="line"><span class="number">20</span>    <span class="comment">// 初始化m0</span></span><br><span class="line"><span class="number">21</span>    mcommoninit(_g_.m, <span class="number">-1</span>)</span><br><span class="line"><span class="number">22</span>    cpuinit()       <span class="comment">// must run before alginit</span></span><br><span class="line"><span class="number">23</span>    alginit()       <span class="comment">// maps must not be used before this call</span></span><br><span class="line"><span class="number">24</span>    modulesinit()   <span class="comment">// provides activeModules</span></span><br><span class="line"><span class="number">25</span>    typelinksinit() <span class="comment">// uses maps, activeModules</span></span><br><span class="line"><span class="number">26</span>    itabsinit()     <span class="comment">// uses activeModules</span></span><br><span class="line"><span class="number">27</span> </span><br><span class="line"><span class="number">28</span>    sigsave(&amp;_g_.m.sigmask)</span><br><span class="line"><span class="number">29</span>    initSigmask = _g_.m.sigmask</span><br><span class="line"><span class="number">30</span> </span><br><span class="line"><span class="number">31</span>    <span class="keyword">if</span> offset := unsafe.Offsetof(sched.timeToRun); offset%<span class="number">8</span> != <span class="number">0</span> &#123;</span><br><span class="line"><span class="number">32</span>       <span class="built_in">println</span>(offset)</span><br><span class="line"><span class="number">33</span>       throw(<span class="string">&quot;sched.timeToRun not aligned to 8 bytes&quot;</span>)</span><br><span class="line"><span class="number">34</span>    &#125;</span><br><span class="line"><span class="number">35</span> </span><br><span class="line"><span class="number">36</span>    goargs()</span><br><span class="line"><span class="number">37</span>    goenvs()</span><br><span class="line"><span class="number">38</span>    parsedebugvars()</span><br><span class="line"><span class="number">39</span>    gcinit()</span><br><span class="line"><span class="number">40</span>    <span class="comment">// 这部分是初始化p，</span></span><br><span class="line"><span class="number">41</span>    <span class="comment">// cpu有多少个核数就初始化多少个p</span></span><br><span class="line"><span class="number">42</span>    lock(&amp;sched.lock)</span><br><span class="line"><span class="number">43</span>    sched.lastpoll = <span class="type">uint64</span>(nanotime())</span><br><span class="line"><span class="number">44</span>    procs := ncpu</span><br><span class="line"><span class="number">45</span>    <span class="keyword">if</span> n, ok := atoi32(gogetenv(<span class="string">&quot;GOMAXPROCS&quot;</span>)); ok &amp;&amp; n &gt; <span class="number">0</span> &#123;</span><br><span class="line"><span class="number">46</span>       procs = n</span><br><span class="line"><span class="number">47</span>    &#125;</span><br><span class="line"><span class="number">48</span>    <span class="keyword">if</span> procresize(procs) != <span class="literal">nil</span> &#123;</span><br><span class="line"><span class="number">49</span>       throw(<span class="string">&quot;unknown runnable goroutine during bootstrap&quot;</span>)</span><br><span class="line"><span class="number">50</span>    &#125;</span><br><span class="line"><span class="number">51</span>    unlock(&amp;sched.lock)</span><br><span class="line"><span class="number">52</span> </span><br><span class="line"><span class="number">53</span>    <span class="comment">// World is effectively started now, as P&#x27;s can run.</span></span><br><span class="line"><span class="number">54</span>    worldStarted()</span><br><span class="line"><span class="number">55</span> &#125;</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>调用runtime.newproc函数来创建主协程（main goroutine），他的任务函数就是runtime.main，建好后插入与m0绑定的那个p的本地队列里</p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newproc</span><span class="params">(siz <span class="type">int32</span>, fn *funcval)</span></span> &#123;</span><br><span class="line">        <span class="comment">// 获取fn函数的参数起始地址，可参考上例中的printAdd，sys.PtrSize的值是8。</span></span><br><span class="line">	argp := add(unsafe.Pointer(&amp;fn), sys.PtrSize)	</span><br><span class="line">        <span class="comment">// 获取一个g（m0.g0）</span></span><br><span class="line">	gp := getg()</span><br><span class="line">        <span class="comment">// 调用者的pc，也就是执行完此函数返回调用者时的下一条指令地址，本例中是 POPQ AX</span></span><br><span class="line">	pc := getcallerpc()	</span><br><span class="line">	systemstack(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		newproc1(fn, argp, siz, gp, pc)</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newproc1</span><span class="params">(fn *funcval, argp unsafe.Pointer, narg <span class="type">int32</span>, callergp *g, callerpc <span class="type">uintptr</span>)</span></span> &#123;</span><br><span class="line">	_g_ := getg()	<span class="comment">// 当前g。g0</span></span><br><span class="line">        ......</span><br><span class="line">	acquirem() <span class="comment">// 禁止抢占</span></span><br><span class="line">	siz := narg</span><br><span class="line">	siz = (siz + <span class="number">7</span>) &amp;^ <span class="number">7</span>	<span class="comment">// 使siz为8的整数倍。&amp;^为双目运算符，将运算符左边数据相异的保留，相同位清零。</span></span><br><span class="line">        ......</span><br><span class="line">	_p_ := _g_.m.p.ptr()	<span class="comment">// 当前关联的p。allp[0]</span></span><br><span class="line">	newg := gfget(_p_)	<span class="comment">// 获取一个g，下有分析。</span></span><br><span class="line">	<span class="keyword">if</span> newg == <span class="literal">nil</span> &#123;</span><br><span class="line">		newg = malg(_StackMin)			<span class="comment">// 分配一个新g</span></span><br><span class="line">		casgstatus(newg, _Gidle, _Gdead)	<span class="comment">// 更改状态</span></span><br><span class="line">		allgadd(newg)				<span class="comment">// 加入到allgs切片中</span></span><br><span class="line">	&#125;</span><br><span class="line">	......</span><br><span class="line">        <span class="comment">// 调整newg的栈顶指针</span></span><br><span class="line">	totalSize := <span class="number">4</span>*sys.RegSize + <span class="type">uintptr</span>(siz) + sys.MinFrameSize <span class="comment">// extra space in case of reads slightly beyond frame</span></span><br><span class="line">	totalSize += -totalSize &amp; (sys.SpAlign - <span class="number">1</span>)                  <span class="comment">// align to spAlign</span></span><br><span class="line">	sp := newg.stack.hi - totalSize</span><br><span class="line">	spArg := sp</span><br><span class="line">	......</span><br><span class="line">	<span class="keyword">if</span> narg &gt; <span class="number">0</span> &#123;</span><br><span class="line">		memmove(unsafe.Pointer(spArg), argp, <span class="type">uintptr</span>(narg)) <span class="comment">// 将参数从调用newproc的函数栈帧中copy到新的g栈帧中。</span></span><br><span class="line">                ......</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// newg.sched存储的是调度相关的信息，调度器要将这些信息装载到cpu中才能运行goroutine。</span></span><br><span class="line">	memclrNoHeapPointers(unsafe.Pointer(&amp;newg.sched), unsafe.Sizeof(newg.sched))	<span class="comment">// 将newg.sched结构体清零</span></span><br><span class="line">	newg.sched.sp = sp	<span class="comment">// 栈顶</span></span><br><span class="line">	newg.stktopsp = sp</span><br><span class="line">        <span class="comment">// 此处只是暂时借用pc属性存储 runtime.goexit + 1 位置的地址。在gostartcallfn会用到。</span></span><br><span class="line">	newg.sched.pc = funcPC(goexit) + sys.PCQuantum	<span class="comment">// +PCQuantum so that previous instruction is in same function</span></span><br><span class="line">	newg.sched.g = guintptr(unsafe.Pointer(newg))	<span class="comment">// 存储newg指针</span></span><br><span class="line">	gostartcallfn(&amp;newg.sched, fn)			<span class="comment">// 将函数与g关联起来。下有分析。</span></span><br><span class="line">	......</span><br><span class="line">	casgstatus(newg, _Gdead, _Grunnable)		<span class="comment">// 更改状态</span></span><br><span class="line">	......</span><br><span class="line">	runqput(_p_, newg, <span class="literal">true</span>)			<span class="comment">// 存储到运行队列中。</span></span><br><span class="line"></span><br><span class="line">         <span class="comment">// 初始化时不会执行，mainStarted 在 runtime.main 中设置为 true</span></span><br><span class="line">	<span class="keyword">if</span> atomic.Load(&amp;sched.npidle) != <span class="number">0</span> &amp;&amp; atomic.Load(&amp;sched.nmspinning) == <span class="number">0</span> &amp;&amp; mainStarted &#123;</span><br><span class="line">		wakep()</span><br><span class="line">	&#125;</span><br><span class="line">	releasem(_g_.m)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>概括讲就是：获取g-&gt;复制参数-&gt;设置调度属性-&gt;放入队列等调度。</p>
+</li>
+<li><p>调用runtime.mstart函数，来启动m。</p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">mstart</span><span class="params">()</span></span> &#123;</span><br><span class="line">	_g_ := getg()</span><br><span class="line">        <span class="comment">// 在启动阶段，_g_.stack早就完成了初始化，所以osStack是false，下面被省略的也不会执行。</span></span><br><span class="line">	osStack := _g_.stack.lo == <span class="number">0</span> </span><br><span class="line">	......</span><br><span class="line">	_g_.stackguard0 = _g_.stack.lo + _StackGuard</span><br><span class="line">	_g_.stackguard1 = _g_.stackguard0</span><br><span class="line">	mstart1()</span><br><span class="line">        ......</span><br><span class="line">	mexit(osStack)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//mstart函数没什么太多工作，主要是为了调用mstart1</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">mstart1</span><span class="params">()</span></span> &#123;</span><br><span class="line">	_g_ := getg()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> _g_ != _g_.m.g0 &#123;</span><br><span class="line">		throw(<span class="string">&quot;bad runtime·mstart&quot;</span>)</span><br><span class="line">	&#125;<span class="comment">//调用 _g_ := getg()获取g，然后检查该g是不是g0，如果不是 g0，直接抛出异常</span></span><br><span class="line">	save(getcallerpc(), getcallersp())	<span class="comment">// 保存调用mstart1的函数（mstart）的 pc 和 sp</span></span><br><span class="line">	asminit()				<span class="comment">// 空函数</span></span><br><span class="line">	minit()					<span class="comment">// 信号相关</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> _g_.m == &amp;m0 &#123;			<span class="comment">// 初始化时会执行这里，也是信号相关</span></span><br><span class="line">		mstartm0()</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> fn := _g_.m.mstartfn; fn != <span class="literal">nil</span> &#123;	<span class="comment">// 初始化时 fn = nil，不会执行这里</span></span><br><span class="line">		fn()</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> _g_.m != &amp;m0 &#123;			<span class="comment">// 不是m0的话，没有p。绑定一个p</span></span><br><span class="line">		acquirep(_g_.m.nextp.ptr())</span><br><span class="line">		_g_.m.nextp = <span class="number">0</span></span><br><span class="line">	&#125;</span><br><span class="line">	schedule()<span class="comment">//调度函数</span></span><br><span class="line">&#125;                                                                                                                                                                                                                                </span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<h2 id="调度逻辑"><a href="#调度逻辑" class="headerlink" title="调度逻辑"></a>调度逻辑</h2><p>schedule函数则为真正的调度函数</p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">schedule</span><span class="params">()</span></span> &#123;</span><br><span class="line">	_g_ := getg()</span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">top:</span><br><span class="line">	<span class="comment">// 如果当前GC需要停止整个世界（STW), 则调用gcstopm休眠当前的M</span></span><br><span class="line">	<span class="keyword">if</span> sched.gcwaiting != <span class="number">0</span> &#123;</span><br><span class="line">		<span class="comment">// 为了STW，停止当前的M</span></span><br><span class="line">		gcstopm()</span><br><span class="line">		<span class="comment">// STW结束后回到 top</span></span><br><span class="line">		<span class="keyword">goto</span> top</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	...</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">var</span> gp *g</span><br><span class="line">	<span class="keyword">var</span> inheritTime <span class="type">bool</span></span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span> gp == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="comment">// Check the global runnable queue once in a while to ensure fairness.</span></span><br><span class="line">		<span class="comment">// Otherwise two goroutines can completely occupy the local runqueue</span></span><br><span class="line">		<span class="comment">// by constantly respawning each other.</span></span><br><span class="line">		<span class="comment">// 每隔61次调度，尝试从全局队列种获取G</span></span><br><span class="line">		<span class="keyword">if</span> _g_.m.p.ptr().schedtick%<span class="number">61</span> == <span class="number">0</span> &amp;&amp; sched.runqsize &gt; <span class="number">0</span> &#123;</span><br><span class="line">			lock(&amp;sched.lock)</span><br><span class="line">			gp = globrunqget(_g_.m.p.ptr(), <span class="number">1</span>)</span><br><span class="line">			unlock(&amp;sched.lock)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> gp == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="comment">// 从p的本地队列中获取</span></span><br><span class="line">		gp, inheritTime = runqget(_g_.m.p.ptr())</span><br><span class="line">		<span class="keyword">if</span> gp != <span class="literal">nil</span> &amp;&amp; _g_.m.spinning &#123;</span><br><span class="line">			throw(<span class="string">&quot;schedule: spinning with local work&quot;</span>)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> gp == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="comment">// 想尽办法找到可运行的G，找不到就不用返回了</span></span><br><span class="line">		gp, inheritTime = findrunnable() <span class="comment">// blocks until work is available</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">	<span class="comment">// println(&quot;execute goroutine&quot;, gp.goid)</span></span><br><span class="line">	<span class="comment">// 找到了g，那就执行g上的任务函数</span></span><br><span class="line">	execute(gp, inheritTime)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>整个过程则是在寻找可执行的g，然后调用execute函数来执行g上的任务函数。上面提到的main goroutine就是第一个被寻找到的可执行g，也就是m0的g0，下面来看一下main goroutine的执行函数runtime.main做了什么</p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The main goroutine.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 获取 main goroutine</span></span><br><span class="line">	g := getg()</span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 在系统栈上运行 sysmon</span></span><br><span class="line">	systemstack(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="comment">// 分配一个新的m，运行sysmon系统后台监控</span></span><br><span class="line">		<span class="comment">// （定期垃圾回收和调度抢占）</span></span><br><span class="line">		newm(sysmon, <span class="literal">nil</span>)</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 确保是主线程</span></span><br><span class="line">	<span class="keyword">if</span> g.m != &amp;m0 &#123;</span><br><span class="line">		throw(<span class="string">&quot;runtime.main not on m0&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// runtime 内部 init 函数的执行，编译器动态生成的。</span></span><br><span class="line">	runtime_init()</span><br><span class="line">	</span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">	<span class="comment">// gc 启动一个goroutine进行gc清扫</span></span><br><span class="line">	gcenable()</span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 执行init函数，编译器动态生成的，</span></span><br><span class="line">	<span class="comment">// 包括用户定义的所有的init函数。</span></span><br><span class="line">	fn := main_init </span><br><span class="line">	fn()</span><br><span class="line">	</span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 真正的执行main func in package main</span></span><br><span class="line">	fn = main_main </span><br><span class="line">	fn()</span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 退出程序</span></span><br><span class="line">	exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 为何这里还需要for循环？</span></span><br><span class="line">	<span class="comment">// 下面的for循环一定会导致程序崩掉，这样就确保了程序一定会退出</span></span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">var</span> x *<span class="type">int32</span></span><br><span class="line">		*x = <span class="number">0</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>其中，间接执行的main_main函数就是我们用户代码中写的那个func main(){}</p>
+<p>到此，从程序启动到用户的main函数执行完毕的整个过程算是理了一遍</p>
+<p>那如果用户在代码中又利用关键字go来新建了一些协程，调度过程又是怎样的呢</p>
+<h2 id="调度策略和时机"><a href="#调度策略和时机" class="headerlink" title="调度策略和时机"></a>调度策略和时机</h2><p>下面这张图比较直观地体现了整个系统如何调度执行新建的G</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pic3.zhimg.com/v2-08a62309cb2c22fe765c20d2f640e15c_1440w.jpg"
+                      alt="img"
+                ></p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">大概流程则为： 1. go func() 语气创建G。</span><br><span class="line">              2. 将G放入P的本地队列（或者平衡到全局队列）。</span><br><span class="line">              3. 唤醒或新建M来执行任务。</span><br><span class="line">              4. 进入调度循环</span><br><span class="line">              5. 尽力获取可执行的G，并执行</span><br><span class="line">              6. 清理现场并且重新进入调度循环</span><br></pre></td></tr></table></figure></div>
+
+<p>下面这张图片的类比我个人觉得十分形象：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250725120332480.png"
+                      alt="image-20250725120332480"
+                ></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Go相较于其它语言的一个优势就在于它轻量级协程Goroutine与调度器的结合，提供了高效、简洁的并发处理机制。学习这个调度逻辑也帮助我在go语言逆向中，能够清楚地知道从程序启动到main函数调用中途经历了什么，以及该如何去寻找主要的函数逻辑。整个Go的调度管理以及runtime的机制还有很多其他的细节和知识，以后再来接着探索</p>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> Golang的八股学习(1)——调度管理</li>
+        <li><strong>作者:</strong> w1n9</li>
+        <li><strong>创建于
+                :</strong> 2025-07-25 12:15:26</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2025-07-25 12:19:15
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://vv1n9.github.io/2025/07/25/Golang八股学习(1)——调度管理/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Go/">#Go</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">目录</div>
+		<div class="page-title">Golang的八股学习(1)——调度管理</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-text">前置知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Goroutine"><span class="nav-text">Goroutine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPM%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B"><span class="nav-text">GPM调度模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#work-stealing%E6%9C%BA%E5%88%B6"><span class="nav-text">work stealing机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hand-off%E6%9C%BA%E5%88%B6"><span class="nav-text">hand off机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B"><span class="nav-text">启动过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6%E9%80%BB%E8%BE%91"><span class="nav-text">调度逻辑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E5%92%8C%E6%97%B6%E6%9C%BA"><span class="nav-text">调度策略和时机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2025</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">w1n9</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共撰写了 1 篇文章
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.4</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="站内搜索您需要的内容..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>
