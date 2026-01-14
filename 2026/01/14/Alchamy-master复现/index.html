@@ -151,7 +151,7 @@
     <!--- Icon Part-->
     <link rel="icon" type="image/png" href="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/204051836-d495c6a9-db6b-40df-b8be-ff0f2a82862e.png" sizes="192x192">
     <link rel="apple-touch-icon" sizes="180x180" href="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/204051836-d495c6a9-db6b-40df-b8be-ff0f2a82862e.png">
-    <meta name="theme-color" content="#6c5ce7">
+    <meta name="theme-color" content="#4B4F8A">
     <link rel="shortcut icon" href="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/204051836-d495c6a9-db6b-40df-b8be-ff0f2a82862e.png">
     <!--- Page Info-->
     
@@ -174,138 +174,60 @@
     
             
                 
+                    <style> .transition-fade { opacity: 1; transition: opacity 0.5s; } html.is-animating .transition-fade { opacity: 0; } </style>
+                
+    
+            
+                
+                    <style> img { max-width: 100%; height: auto; } </style>
+                
+    
+            
+                
+                    <style>
+  .transition-fade { opacity: 1; transition: opacity .35s ease; }
+  html.is-animating .transition-fade { opacity: 0; }
+  ::selection { background: rgba(199,163,107,.35); }
+  .article-content { letter-spacing: .2px; }
+</style>
+                
+    
+            
+                
                     <style>
 /* =========================
  * Typography – Publication Style
  * ========================= */
-
-/* ---------- 基础正文 ---------- */
-.article-content {
-  font-size: 17px;
-  line-height: 1.9;
-  letter-spacing: 0.2px;
-  word-break: break-word;
+.article-content { font-size: 17px; line-height: 1.9; letter-spacing: 0.2px; word-break: break-word; }
+.article-content p { margin: 1.2em 0; }
+.article-content h1,.article-content h2,.article-content h3,.article-content h4,.article-content h5,.article-content h6 {
+  font-weight: 600; line-height: 1.4; margin-top: 2.2em; margin-bottom: 0.8em; letter-spacing: 0.3px;
 }
-
-.article-content p {
-  margin: 1.2em 0;
-}
-
-/* ---------- 标题系统 ---------- */
-.article-content h1,
-.article-content h2,
-.article-content h3,
-.article-content h4,
-.article-content h5,
-.article-content h6 {
-  font-weight: 600;
-  line-height: 1.4;
-  margin-top: 2.2em;
-  margin-bottom: 0.8em;
-  letter-spacing: 0.3px;
-}
-
-.article-content h1 {
-  font-size: 2rem;
-}
-
-.article-content h2 {
-  font-size: 1.6rem;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  padding-bottom: 0.3em;
-}
-
-.article-content h3 {
-  font-size: 1.35rem;
-}
-
-.article-content h4 {
-  font-size: 1.15rem;
-  opacity: 0.9;
-}
-
-/* ---------- 引用块 ---------- */
+.article-content h1 { font-size: 2rem; }
+.article-content h2 { font-size: 1.6rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.3em; }
+.article-content h3 { font-size: 1.35rem; }
+.article-content h4 { font-size: 1.15rem; opacity: 0.9; }
 .article-content blockquote {
-  margin: 1.8em 0;
-  padding: 0.8em 1.2em;
-  border-left: 4px solid rgba(199,163,107,0.6);
-  background: rgba(255,255,255,0.03);
-  color: rgba(255,255,255,0.85);
+  margin: 1.8em 0; padding: 0.8em 1.2em; border-left: 4px solid rgba(199,163,107,0.6);
+  background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.85);
 }
-
-.article-content blockquote p {
-  margin: 0.6em 0;
-}
-
-/* ---------- 列表 ---------- */
-.article-content ul,
-.article-content ol {
-  padding-left: 1.4em;
-  margin: 1.2em 0;
-}
-
-.article-content li {
-  margin: 0.5em 0;
-  line-height: 1.8;
-}
-
-/* ---------- 代码（行内） ---------- */
-.article-content code {
-  padding: 0.2em 0.4em;
-  border-radius: 6px;
-  background: rgba(255,255,255,0.08);
-  font-size: 0.9em;
-}
-
-/* ---------- 代码块 ---------- */
+.article-content blockquote p { margin: 0.6em 0; }
+.article-content ul,.article-content ol { padding-left: 1.4em; margin: 1.2em 0; }
+.article-content li { margin: 0.5em 0; line-height: 1.8; }
+.article-content code { padding: 0.2em 0.4em; border-radius: 6px; background: rgba(255,255,255,0.08); font-size: 0.9em; }
 .article-content pre {
-  margin: 1.8em 0;
-  padding: 1.2em 1.4em;
-  border-radius: 14px;
-  background: rgba(0,0,0,0.35);
-  font-size: 0.9em;
-  line-height: 1.7;
-  overflow-x: auto;
+  margin: 1.8em 0; padding: 1.2em 1.4em; border-radius: 14px; background: rgba(0,0,0,0.35);
+  font-size: 0.9em; line-height: 1.7; overflow-x: auto;
 }
-
-.article-content pre code {
-  background: none;
-  padding: 0;
-}
-
-/* ---------- 分割线 ---------- */
+.article-content pre code { background: none; padding: 0; }
 .article-content hr {
-  border: none;
-  height: 1px;
-  margin: 3em 0;
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgba(255,255,255,0.15),
-    transparent
-  );
+  border: none; height: 1px; margin: 3em 0;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent);
 }
-
-/* ---------- 图片说明 ---------- */
-figure figcaption {
-  margin-top: 0.6em;
-  font-size: 0.85em;
-  color: rgba(255,255,255,0.6);
-  text-align: center;
-}
-
-/* ---------- 链接 ---------- */
-.article-content a {
-  text-decoration: none;
-  border-bottom: 1px solid rgba(199,163,107,0.4);
-}
-
-.article-content a:hover {
-  border-bottom-color: rgba(199,163,107,0.9);
-}
-
+figure figcaption { margin-top: 0.6em; font-size: 0.85em; color: rgba(255,255,255,0.6); text-align: center; }
+.article-content a { text-decoration: none; border-bottom: 1px solid rgba(199,163,107,0.4); }
+.article-content a:hover { border-bottom-color: rgba(199,163,107,0.9); }
 </style>
-
                 
     
 
@@ -329,19 +251,19 @@ figure figcaption {
     
     
     
-        <link href="" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-sc/index.css" rel="stylesheet">
     
     
+        <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter/index.css" rel="stylesheet">
     
     
-        
-<script src="/js/build/libs/anime.min.js"></script>
-
+        <link href="https://cdn.jsdelivr.net/npm/@fontsource/playfair-display/index.css" rel="stylesheet">
+    
     
 
     <script id="hexo-configurations">
     window.config = {"hostname":"example.com","root":"/","language":"zh-CN"};
-    window.theme = {"articles":{"style":{"font_size":"17px","line_height":1.9,"image_border_radius":"10px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"center","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"atom-one-light","dark":"monokai-sublime"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#6c5ce7","secondary":"#00cec9","default_mode":"dark"},"global":{"fonts":{"chinese":{"enable":true,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":true},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":true,"custom_message":"欢迎来到 w1n9 の HOME"},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine My Life."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"w1n9のHOME","subtitle":{"text":["长时间未联系，是为了逐渐淡忘，还是积累思念？"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.4","navbar":{"auto_hide":false,"color":{"left":"#af6bcc","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"分类":{"path":"/categories/","icon":"fa-regular fa-folder"},"标签":{"path":"/tags/","icon":"fa-regular fa-tags"},"友链":{"path":"/links","icon":"fa-regular fa-link"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"标签":{"path":"/tags","icon":"fa-regular fa-tags"},"分类":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3},"分类":{"enable":true,"limit":8},"标签":{"enable":true,"limit":10}},"footerStart":"2025/7/10 8:00:00"};
+    window.theme = {"articles":{"style":{"font_size":"17px","line_height":1.9,"image_border_radius":"12px","image_alignment":"center","image_caption":true,"link_icon":false,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"atom-one-light","dark":"monokai-sublime"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#4B4F8A","secondary":"#C7A36B","default_mode":"dark"},"global":{"fonts":{"chinese":{"enable":true,"family":"\"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", sans-serif","url":"https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-sc/index.css"},"english":{"enable":true,"family":"\"Inter\", system-ui, -apple-system, Segoe UI, Roboto, sans-serif","url":"https://cdn.jsdelivr.net/npm/@fontsource/inter/index.css"},"title":{"enable":true,"family":"\"Playfair Display\", \"Noto Serif SC\", serif","url":"https://cdn.jsdelivr.net/npm/@fontsource/playfair-display/index.css"}},"content_max_width":"920px","sidebar_width":"240px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":true,"percentage":false},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":"欢迎来到 w1n9 の HOME"},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine My Life."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"w1n9のHOME","subtitle":{"text":["记录 · 思考 · 创作"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":false,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.4","navbar":{"auto_hide":false,"color":{"left":"#af6bcc","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"分类":{"path":"/categories/","icon":"fa-regular fa-folder"},"标签":{"path":"/tags/","icon":"fa-regular fa-tags"},"友链":{"path":"/links","icon":"fa-regular fa-link"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"标签":{"path":"/tags","icon":"fa-regular fa-tags"},"分类":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3},"分类":{"enable":true,"limit":8},"标签":{"enable":true,"limit":10}},"footerStart":"2025/7/10 8:00:00"};
     window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
     window.data = {"masonry":false};
   </script>
@@ -370,6 +292,8 @@ figure figcaption {
 <body>
 	<div class="progress-bar-container">
 	
+	<span class="scroll-progress-bar"></span>
+	
 
 	
 	<span class="pjax-progress-bar"></span>
@@ -377,153 +301,6 @@ figure figcaption {
 	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
 	<!--        </span>-->
 	
-</div>
-
-<style>
-    :root {
-        --preloader-background-color: #fff;
-        --preloader-text-color: #000;
-    }
-
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --preloader-background-color: #202124;
-            --preloader-text-color: #fff;
-        }
-    }
-
-    @media (prefers-color-scheme: light) {
-        :root {
-            --preloader-background-color: #fff;
-            --preloader-text-color: #000;
-        }
-    }
-
-    @media (max-width: 600px) {
-        .ml13 {
-            font-size: 2.6rem !important; /* Adjust this value as needed */
-        }
-    }
-
-    .preloader {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
-        align-items: center;
-        justify-content: center;
-        position: fixed;
-        padding: 12px;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh; /* 'h-screen' is 100% of the viewport height */
-        background-color: var(--preloader-background-color);
-        z-index: 1100; /* 'z-[1100]' sets the z-index */
-        transition: opacity 0.2s ease-in-out;
-    }
-
-    .ml13 {
-        font-size: 3.2rem;
-        /* text-transform: uppercase; */
-        color: var(--preloader-text-color);
-        letter-spacing: -1px;
-        font-weight: 500;
-        font-family: 'Chillax-Variable', sans-serif;
-        text-align: center;
-    }
-
-    .ml13 .word {
-        display: inline-flex;
-        flex-wrap: wrap;
-        white-space: nowrap;
-    }
-
-    .ml13 .letter {
-        display: inline-block;
-        line-height: 1em;
-    }
-</style>
-
-<div class="preloader">
-    <h2 class="ml13">
-        欢迎来到 w1n9 の HOME
-    </h2>
-    <script>
-        var textWrapper = document.querySelector('.ml13');
-        // Split text into words
-        var words = textWrapper.textContent.trim().split(' ');
-
-        // Clear the existing content
-        textWrapper.innerHTML = '';
-
-        // Wrap each word and its letters in spans
-        words.forEach(function(word) {
-            var wordSpan = document.createElement('span');
-            wordSpan.classList.add('word');
-            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
-            textWrapper.appendChild(wordSpan);
-            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
-        });
-
-        var animation = anime.timeline({ loop: true })
-            .add({
-                targets: '.ml13 .letter',
-                translateY: [20, 0],
-                translateZ: 0,
-                opacity: [0, 1],
-                filter: ['blur(5px)', 'blur(0px)'],
-                easing: "easeOutExpo",
-                duration: 1200,
-                delay: (el, i) => 300 + 20 * i,
-            })
-            .add({
-                targets: '.ml13 .letter',
-                translateY: [0, -20],
-                opacity: [1, 0],
-                filter: ['blur(0px)', 'blur(5px)'],
-                easing: "easeInExpo",
-                duration: 1000,
-                delay: (el, i) => 15 * i,
-                complete: function() {
-                    hidePreloader();
-                }
-            }, '-=700');
-
-
-        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
-
-        // If the theme status is not found in local storage, check the preferred color scheme
-        if (themeStatus === undefined || themeStatus === null) {
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                themeStatus = 'dark';
-            } else {
-                themeStatus = 'light';
-            }
-        }
-
-        // Now you can use the themeStatus variable in your code
-        if (themeStatus) {
-            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
-            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
-        } else {
-            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
-            document.documentElement.style.setProperty('--preloader-text-color', '#000');
-        }
-
-        window.addEventListener('load', function () {
-            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
-        });
-
-        function hidePreloader() {
-            var preloader = document.querySelector('.preloader');
-            preloader.style.opacity = '0';
-            setTimeout(function () {
-                preloader.style.display = 'none';
-            }, 200);
-        }
-    </script>
 </div>
 
 <main class="page-container" id="swup">
@@ -761,7 +538,7 @@ figure figcaption {
 
 		<div class="article-title relative w-full">
 			
-			<div class="w-full flex items-center pt-6 justify-center">
+			<div class="w-full flex items-center pt-6 justify-start">
 				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Sekaictf2025 Alchamy_master复现</h1>
 			</div>
 			
@@ -851,8 +628,8 @@ figure figcaption {
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
 			<p>在闲逛一位大佬的博客的时候，偶然发现这道题有点新颖，遂来复现一下，参考了两篇wp</p>
 <blockquote>
-<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/project-sekai-ctf/sekaictf-2025/blob/main/reverse/alchemy-master/solution/README.md" >sekaictf-2025&#x2F;reverse&#x2F;alchemy-master&#x2F;solution&#x2F;README.md at main · project-sekai-ctf&#x2F;sekaictf-2025<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>(官方wp)</p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://tkazer.github.io/2025/08/19/SekaiCTF2025/" >SekaiCTF 2025 Reverse WP | Liv’s blog<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/project-sekai-ctf/sekaictf-2025/blob/main/reverse/alchemy-master/solution/README.md" >sekaictf-2025&#x2F;reverse&#x2F;alchemy-master&#x2F;solution&#x2F;README.md at main · project-sekai-ctf&#x2F;sekaictf-2025</a>(官方wp)</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://tkazer.github.io/2025/08/19/SekaiCTF2025/" >SekaiCTF 2025 Reverse WP | Liv’s blog</a></p>
 </blockquote>
 <p>题目为SekaiCTF2025 的一道题，题目名为Alchamy master</p>
 <h2 id="初步分析"><a href="#初步分析" class="headerlink" title="初步分析"></a>初步分析</h2><p>一共四个附件，分别来看一下</p>
@@ -860,62 +637,62 @@ figure figcaption {
 
 <p>主要作用是读取用户输入的C++代码然后在一个临时目录将其写入一个新建的solution.cpp里，然后将solution.cpp的目录作为参数传入launch.exe</p>
 <h3 id="launch-exe"><a href="#launch-exe" class="headerlink" title="launch.exe"></a>launch.exe</h3><p>cl.exe的启动器，然后就是把plugin.dll注入进去</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20251229081541891.png"
                       alt="image-20251229081541891"
-                ></p>
+                ><figcaption>image-20251229081541891</figcaption></figure></p>
 <p>第6个参数值为4，进程只挂起不运行</p>
 <p>注入部分</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20251229081608147.png"
                       alt="image-20251229081608147"
-                ></p>
+                ><figcaption>image-20251229081608147</figcaption></figure></p>
 <h3 id="plugin-dll"><a href="#plugin-dll" class="headerlink" title="plugin.dll"></a>plugin.dll</h3><p>查询到字符串</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20251230112659302.png"
                       alt="image-20251230112659302"
-                ></p>
+                ><figcaption>image-20251230112659302</figcaption></figure></p>
 <p>这里一个逻辑是</p>
 <p>往上回溯到函数sub_180002010()，获取了CL.exe的模块基址</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20251229092254565.png"
                       alt="image-20251229092254565"
-                ></p>
+                ><figcaption>image-20251229092254565</figcaption></figure></p>
 <p>分析sub_180003230得知是hook函数，hook了CL.exe基地址偏移0xD5AA0位置的函数以及LoadLibrary，</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20251229130417205.png"
                       alt="image-20251229130417205"
-                ></p>
+                ><figcaption>image-20251229130417205</figcaption></figure></p>
 <p>保留原指令</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20251229130456767.png"
                       alt="image-20251229130456767"
-                ></p>
+                ><figcaption>image-20251229130456767</figcaption></figure></p>
 <p>然后还hook了c1.dll和c2.dll的同一个函数，hook的调用函数也是同一个，就是我们通过字符串查找输出验证信息的函数</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20260112211044078.png"
                       alt="image-20260112211044078"
-                ></p>
-<p><img  
+                ><figcaption>image-20260112211044078</figcaption></figure></p>
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20260112211101561.png"
                       alt="image-20260112211101561"
-                ></p>
+                ><figcaption>image-20260112211101561</figcaption></figure></p>
 <p>来看一下验证函数的主要逻辑</p>
 <div class="code-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> __fastcall <span class="title function_">sub_7FF93CB41E00</span><span class="params">(__int64 a1)</span></span><br><span class="line">&#123;</span><br><span class="line">  __int64 *v1; <span class="comment">// r9</span></span><br><span class="line">  __int64 v2; <span class="comment">// r9</span></span><br><span class="line">  __int64 *v3; <span class="comment">// r9</span></span><br><span class="line">  __int64 v4; <span class="comment">// r11</span></span><br><span class="line">  _DWORD *v5; <span class="comment">// rax</span></span><br><span class="line">  <span class="type">int</span> v6; <span class="comment">// r10d</span></span><br><span class="line">  <span class="type">char</span> v7; <span class="comment">// cl</span></span><br><span class="line">  __int64 v8; <span class="comment">// r8</span></span><br><span class="line">  __int64 v11; <span class="comment">// rcx</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v12; <span class="comment">// rax</span></span><br><span class="line"></span><br><span class="line">  v1 = *(__int64 **)(a1 + <span class="number">16</span>);</span><br><span class="line">  <span class="keyword">if</span> ( v1 )</span><br><span class="line">  &#123;</span><br><span class="line">    v2 = *v1;</span><br><span class="line">    <span class="keyword">if</span> ( v2 )</span><br><span class="line">    &#123;</span><br><span class="line">      v3 = *(__int64 **)(v2 + <span class="number">56</span>);</span><br><span class="line">      <span class="keyword">if</span> ( v3 )</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="keyword">while</span> ( *((_BYTE *)v3 + <span class="number">12</span>) != <span class="number">23</span> )</span><br><span class="line">        &#123;</span><br><span class="line">          v3 = (__int64 *)*v3;</span><br><span class="line">          <span class="keyword">if</span> ( !v3 )</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        v4 = <span class="number">0</span>i64;</span><br><span class="line">        <span class="keyword">do</span></span><br><span class="line">        &#123;</span><br><span class="line">          v5 = &amp;unk_7FF93CB65D20;</span><br><span class="line">          <span class="keyword">while</span> ( *v5 != *((_DWORD *)v3 + <span class="number">2</span>) )</span><br><span class="line">          &#123;</span><br><span class="line">            v5 += <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> ( v5 == (_DWORD *)&amp;unk_7FF93CB65D68 )</span><br><span class="line">              <span class="keyword">goto</span> LABEL_36;</span><br><span class="line">          &#125;</span><br><span class="line">          v6 = *((<span class="type">unsigned</span> __int16 *)v5 + <span class="number">2</span>);</span><br><span class="line">          v7 = <span class="number">0</span>;</span><br><span class="line">          v8 = <span class="number">0</span>i64;</span><br><span class="line">          <span class="keyword">while</span> ( ((<span class="number">1</span> &lt;&lt; v7) &amp; v6) == <span class="number">0</span> || (&amp;data1)[v8] )</span><br><span class="line">          &#123;</span><br><span class="line">            ++v7;</span><br><span class="line">            <span class="keyword">if</span> ( (<span class="type">unsigned</span> __int64)++v8 &gt;= <span class="number">7</span> )</span><br><span class="line">            &#123;</span><br><span class="line">              <span class="keyword">if</span> ( (v6 &amp; <span class="number">1</span>) != <span class="number">0</span> )</span><br><span class="line">                data1 = (_QWORD *)((<span class="type">char</span> *)data1 - <span class="number">1</span>);</span><br><span class="line">              <span class="keyword">if</span> ( (v6 &amp; <span class="number">2</span>) != <span class="number">0</span> )</span><br><span class="line">                --data2;</span><br><span class="line">              <span class="keyword">if</span> ( (v6 &amp; <span class="number">4</span>) != <span class="number">0</span> )</span><br><span class="line">                --data3;</span><br><span class="line">              <span class="keyword">if</span> ( (v6 &amp; <span class="number">8</span>) != <span class="number">0</span> )</span><br><span class="line">                --data4;</span><br><span class="line">              <span class="keyword">if</span> ( (v6 &amp; <span class="number">0x10</span>) != <span class="number">0</span> )</span><br><span class="line">                --data5;</span><br><span class="line">              <span class="keyword">if</span> ( (v6 &amp; <span class="number">0x20</span>) != <span class="number">0</span> )</span><br><span class="line">                --data6;</span><br><span class="line">              <span class="keyword">if</span> ( (v6 &amp; <span class="number">0x40</span>) != <span class="number">0</span> )</span><br><span class="line">                --data7;</span><br><span class="line">              _ECX = *((<span class="type">unsigned</span> __int16 *)v5 + <span class="number">3</span>) | <span class="number">0xFFFF0000</span>;</span><br><span class="line">              <span class="keyword">if</span> ( dword_7FF93CB69010 &lt; <span class="number">5</span> )</span><br><span class="line">                _BitScanForward((<span class="type">unsigned</span> <span class="type">int</span> *)&amp;_EAX, _ECX);</span><br><span class="line">              <span class="keyword">else</span></span><br><span class="line">                __asm &#123; tzcnt   eax, ecx &#125;</span><br><span class="line">              v11 = <span class="number">8</span>i64 * _EAX + <span class="number">170672</span>;</span><br><span class="line">              v12 = *(_QWORD *)((<span class="type">char</span> *)&amp;unk_7FF93CB40000 + v11) + <span class="number">1</span>i64;</span><br><span class="line">              <span class="keyword">if</span> ( v12 &gt; <span class="number">0x4268</span> )</span><br><span class="line">                v12 = <span class="number">0x4268</span>i64;</span><br><span class="line">              *(_QWORD *)((<span class="type">char</span> *)&amp;unk_7FF93CB40000 + v11) = v12;</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">LABEL_36:</span><br><span class="line">          v3 = (__int64 *)*v3;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> ( v3 );</span><br><span class="line">        <span class="keyword">while</span> ( (&amp;data1)[v4] == (&amp;target)[v4] )</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="keyword">if</span> ( (<span class="type">unsigned</span> __int64)++v4 &gt;= <span class="number">7</span> )</span><br><span class="line">          &#123;</span><br><span class="line">            sub_7FF93CB41DB0(<span class="string">&quot;Good job! Here is your flag: SEKAI&#123;real_flag_is_on_remote&#125;\n&quot;</span>);</span><br><span class="line">            sub_7FF93CB4A020(<span class="number">0</span>i64);</span><br><span class="line">            JUMPOUT(<span class="number">0x7FF93CB41FBB</span>i64);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
@@ -924,26 +701,26 @@ figure figcaption {
 
 <p>大体逻辑为先遍历整个链表，找到type值为23的节点开始往下分析，将v3中key成员的值与v5中的某个偏移值进行比较，再来进行对全局数组的7个值进行操作计算，最后再与目标值进行比较。</p>
 <p>这是初始值</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20260113160536912.png"
                       alt="image-20260113160536912"
-                ></p>
+                ><figcaption>image-20260113160536912</figcaption></figure></p>
 <p>这是目标值</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20260113160606727.png"
                       alt="image-20260113160606727"
-                ></p>
+                ><figcaption>image-20260113160606727</figcaption></figure></p>
 <p>看大佬的博客，他的一个做法是，发现了v3和v5的数据结构后，判断我们输入的cpp代码分别都对应着不同的类型，而不同类型的代码分别又对应着一个不同的key值（该值是被保存到全局数组dword_7FFE52FA5D20中的），每个key值也有对应的操作数，分别为key值后面的两个int16值，用来控制最终验证数组的加减的</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20260113155702965.png"
                       alt="image-20260113155702965"
-                ></p>
+                ><figcaption>image-20260113155702965</figcaption></figure></p>
 <p>然后他通过传入不同的cpp代码来发现不同的代码类型来对应的相应key值和操作数</p>
 <p>像这样</p>
 <div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">a</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">reinterpret_cast</span>&lt;<span class="built_in">void</span> (*)()&gt;(<span class="literal">nullptr</span>)();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">933 -&gt; function def</span></span><br><span class="line"><span class="comment">939</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">899 -&gt; call()</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">86c -&gt; return 0;</span></span><br><span class="line"><span class="comment">89b</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">93a</span></span><br><span class="line"><span class="comment">931</span></span><br><span class="line"><span class="comment">934</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">a</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">933</span></span><br><span class="line"><span class="comment">939</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">852 -&gt; int b;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">86c -&gt; return 0;</span></span><br><span class="line"><span class="comment">89b</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">93a</span></span><br><span class="line"><span class="comment">931</span></span><br><span class="line"><span class="comment">934</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">a</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">933</span></span><br><span class="line"><span class="comment">939</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">86c -&gt; return 0;</span></span><br><span class="line"><span class="comment">89b</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">86c -&gt; return 0;</span></span><br><span class="line"><span class="comment">89b</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">93a</span></span><br><span class="line"><span class="comment">931</span></span><br><span class="line"><span class="comment">934</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">a</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">933</span></span><br><span class="line"><span class="comment">939</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">939</span></span><br><span class="line"><span class="comment">93a</span></span><br><span class="line"><span class="comment">89b</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">93a -&gt; end of &#123;&#125;</span></span><br><span class="line"><span class="comment">931</span></span><br><span class="line"><span class="comment">934</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">a</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">throw</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">933</span></span><br><span class="line"><span class="comment">939</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">84f</span></span><br><span class="line"><span class="comment">84f</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">899 -&gt; call</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">8a2 -&gt; throw</span></span><br><span class="line"><span class="comment">89b</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">93a</span></span><br><span class="line"><span class="comment">931</span></span><br><span class="line"><span class="comment">931</span></span><br><span class="line"><span class="comment">934</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
@@ -959,20 +736,20 @@ figure figcaption {
 <p>梳理一下总体逻辑，写入solution.cpp传入launch.exe作为参数启动 -&gt; launch.exe挂起cl.exe进程等待注入  -&gt; plugin.dll远程线程注入cl.exe进程  -&gt; hook了cl.exe和其模块的某个函数，调用了验证函数 -&gt; 验证函数有一组全局数组需要我们构造cpp代码来得到一组操作对其进行加减，最后将其和我们的目标值进行比较，最后输出占位flag，当然最后还需要远程上传代码获取远端flag</p>
 <h2 id="自己的思考"><a href="#自己的思考" class="headerlink" title="自己的思考"></a>自己的思考</h2><p>这道题像大佬博客里那样做应该就是比较完整且规范的解法了，不过这道题应该还是有值得深挖的地方的，比如那些key和操作数到底有什么含义，整个的计算流程是怎么样的</p>
 <p>首先v5的数据结构恢复大致如下</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20260113214751297.png"
                       alt="image-20260113214751297"
-                ></p>
+                ><figcaption>image-20260113214751297</figcaption></figure></p>
 <p>其中的err_num就是一开始提到的那个v3里的key，也就是之前所说的所谓的代码类型对应的编码</p>
 <p>一共是这些值</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20260113232107420.png"
                       alt="image-20260113232107420"
-                ></p>
+                ><figcaption>image-20260113232107420</figcaption></figure></p>
 <p>至于为什么叫他err_num，其实在恢复这些数据后，像什么2334，2130这些问了ai之后发现这些数据其实是MSVC的错误编号，也就是我们在编译的时候遇到的一些报错他都对应这一个编号，我让ai帮我总结了一下这些错误编号</p>
 <table>
 <thead>
@@ -1042,19 +819,19 @@ figure figcaption {
 <p>下面就是来重点分析每个错误编号对应的操作</p>
 <p>首先整个流程是通过Controller结构体的后两个成员dec_mask和add_mask（前者控制减的操作，后者控制加的操作）来实现</p>
 <p>减操作</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20260114191434536.png"
                       alt="image-20260114191434536"
-                ></p>
+                ><figcaption>image-20260114191434536</figcaption></figure></p>
 <p>加操作（cap常量0x4268是最大值，当大于等于cap常量时取该值）</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20260114191455802.png"
                       alt="image-20260114191455802"
-                ></p>
+                ><figcaption>image-20260114191455802</figcaption></figure></p>
 <p>提取所有的mask值，总结出了以下的规律</p>
 <div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">先定义原数组为src[7]</span><br><span class="line"></span><br><span class="line">C2334: dec_mask = 0x11 -&gt; src[0]--, src[4]--; </span><br><span class="line">       add_mask = 0x40 -&gt; src[6]++;</span><br><span class="line">       </span><br><span class="line">C2130: dec_mask = 0x50 -&gt; src[4]--,ssrc[6]--;</span><br><span class="line">       add_mask = 0x04 -&gt; src[2]++;</span><br><span class="line">       </span><br><span class="line">C2210: dec_mask = 0x54 -&gt; src[2]--, src[4]--, src[6]--;</span><br><span class="line">       add_mask = 0x02 -&gt; src[1]++;</span><br><span class="line">       </span><br><span class="line">C2211: dec_mask = 0x09 -&gt; src[0]--, src[3]--;</span><br><span class="line">       add_mask = 0x10 -&gt; src[4]++;</span><br><span class="line">       </span><br><span class="line">C2201: dec_mask = 0x41 -&gt; src[0]--, src[6]--;</span><br><span class="line">       add_mask = 0x08 -&gt; src[3]++;</span><br><span class="line">       </span><br><span class="line">C2327: dec_mask = 0x0C -&gt; src[2]--, src[3]--;</span><br><span class="line">       add_mask = 0x02 -&gt; src[1]++;  </span><br><span class="line">       </span><br><span class="line">C2156: dec_mask = 0x11 -&gt; src[0]--, src[4]--;</span><br><span class="line">       add_mask = 0x20 -&gt; src[5]++;</span><br><span class="line">       </span><br><span class="line">C2355: dec_mask = 0x41 -&gt; src[0]--, src[6]--;</span><br><span class="line">       add_mask = 0x20 -&gt; src[5]++; </span><br><span class="line">       </span><br><span class="line">C2362: dec_mask = 0x11 -&gt; src[0]--, src[4]--; </span><br><span class="line">       add_mask = 0x40 -&gt; src[5]++;</span><br></pre></td></tr></table></figure></div>
 
@@ -1136,12 +913,12 @@ figure figcaption {
 <p>一开始没看懂官方wp在干嘛，现在这样梳理一遍之后倒回去看就发现差不多这就是官方的做法</p>
 <p>最后完整的cpp代码就不展示了有点长，主要就是构造相应的错误代码，关键就是看如何能够通过这些反应过程来达到最终目的</p>
 <p>复现差不多就到这，远端环境估计关了，就在本地验证一下</p>
-<p><img  
+<p><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://w1n9-1365782357.cos.ap-chengdu.myqcloud.com/image-20260114194302550.png"
                       alt="image-20260114194302550"
-                ></p>
+                ><figcaption>image-20260114194302550</figcaption></figure></p>
 
 		</div>
 
@@ -1394,6 +1171,10 @@ figure figcaption {
 		
 
 		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="fa-regular fa-arrow-up"></i>
+		</li>
+		
 
 		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
 			<i class="fa-regular fa-arrow-down"></i>
@@ -1403,11 +1184,6 @@ figure figcaption {
 	<ul class="visible-tools-list">
 		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
 			<i class="fa-regular fa-cog fa-spin"></i>
-		</li>
-		
-		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
-			<i class="arrow-up fas fa-arrow-up"></i>
-			<span class="percent"></span>
 		</li>
 		
 		
@@ -1540,6 +1316,10 @@ figure figcaption {
 
 
 
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
 
 
 
@@ -1558,6 +1338,12 @@ figure figcaption {
 
 <script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
 
+
+
+    
+<script src="/js/build/libs/pangu.min.js"></script>
+
+<script src="/js/build/plugins/pangu.js"></script>
 
 
 
